@@ -91,10 +91,6 @@ function MonthlyCalendar({ monthData }) {
         <h3 style={styles.legendTitle}>Grade Colors</h3>
         <div style={styles.legendItems}>
           <div style={styles.legendItem}>
-            <div style={{...styles.legendColor, backgroundColor: '#1B5E20'}}></div>
-            <span>S+</span>
-          </div>
-          <div style={styles.legendItem}>
             <div style={{...styles.legendColor, backgroundColor: '#4CAF50'}}></div>
             <span>A+/A/A-</span>
           </div>
