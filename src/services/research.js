@@ -126,10 +126,21 @@ export function compareWeeks(currentWeek, previousWeeks) {
   const currentAvg = calculateWeekAverage(currentWeek);
   const previousAvg = calculateWeekAverage(previousWeeks.flat());
 
+  // Safely calculate percentage changes, avoiding division by zero
+  const waterChange = previousAvg.water > 0 
+    ? ((currentAvg.water - previousAvg.water) / previousAvg.water) * 100 
+    : 0;
+  const alcoholChange = previousAvg.alcohol > 0 
+    ? ((currentAvg.alcohol - previousAvg.alcohol) / previousAvg.alcohol) * 100 
+    : 0;
+  const smokingChange = previousAvg.smoking > 0 
+    ? ((currentAvg.smoking - previousAvg.smoking) / previousAvg.smoking) * 100 
+    : 0;
+
   return {
-    waterChange: ((currentAvg.water - previousAvg.water) / previousAvg.water) * 100,
-    alcoholChange: ((currentAvg.alcohol - previousAvg.alcohol) / previousAvg.alcohol) * 100,
-    smokingChange: ((currentAvg.smoking - previousAvg.smoking) / previousAvg.smoking) * 100,
+    waterChange,
+    alcoholChange,
+    smokingChange,
     improvement: calculateOverallImprovement(currentAvg, previousAvg)
   };
 }

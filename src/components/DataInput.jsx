@@ -22,7 +22,7 @@ function DataInput() {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'date' ? value : parseInt(value) || 0
+      [name]: name === 'date' ? value : parseInt(value, 10) || 0
     }));
   };
 

@@ -145,8 +145,8 @@ function getRecommendation(totalScore, breakdown) {
   } else if (totalScore >= 80) {
     return `Good progress! ${recommendations[weakest[0]]}`;
   } else if (totalScore >= 70) {
-    return `There\'s room for improvement. ${recommendations[weakest[0]]}`;
+    return `There's room for improvement. ${recommendations[weakest[0]]}`;
   } else {
-    return `Let\'s work on your health together. ${recommendations[weakest[0]]}`;
+    return `Let's work on your health together. ${recommendations[weakest[0]]}`;
   }
 }
