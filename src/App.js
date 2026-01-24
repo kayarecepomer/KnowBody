@@ -1,60 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import DataInput from './components/DataInput';
-import WeeklyGrade from './components/WeeklyGrade';
-import AlertsPanel from './components/AlertsPanel';
-import WeeklyTrendsChart from './components/Charts/WeeklyTrendsChart';
-import { getCurrentWeekData } from './utils/storage';
-import { generateAlerts } from './services/research';
+import Navigation from './components/Navigation';
+import DailyPage from './pages/DailyPage';
+import StatsPage from './pages/StatsPage';
 import { Activity } from 'lucide-react';
 
 function App() {
-  const [weekData, setWeekData] = useState([]);
-  const [alerts, setAlerts] = useState([]);
-
-  // Load data on mount and set up refresh
-  useEffect(() => {
-    loadWeekData();
-    
-    // Refresh data every minute
-    const interval = setInterval(loadWeekData, 60000);
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  const loadWeekData = () => {
-    const data = getCurrentWeekData();
-    setWeekData(data);
-    
-    // Generate alerts based on week data
-    const newAlerts = generateAlerts(data);
-    setAlerts(newAlerts);
-  };
-
   return (
-    <div className="App">
-      <header style={styles.header}>
-        <div style={styles.headerContent}>
-          <Activity size={40} color="#4CAF50" />
-          <h1 style={styles.title}>Health Tracker</h1>
-        </div>
-        <p style={styles.subtitle}>Research-based health tracking for better living</p>
-      </header>
+    <Router>
+      <div className="App">
+        <header style={styles.header}>
+          <div style={styles.headerContent}>
+            <Activity size={40} color="#4CAF50" />
+            <h1 style={styles.title}>Health Tracker</h1>
+          </div>
+          <p style={styles.subtitle}>Research-based health tracking for better living</p>
+        </header>
 
-      <main style={styles.main}>
-        <DataInput />
-        
-        <WeeklyGrade weekData={weekData} />
-        
-        <AlertsPanel alerts={alerts} />
-        
-        <WeeklyTrendsChart data={weekData} />
-      </main>
+        <Navigation />
 
-      <footer style={styles.footer}>
-        <p>Built for ConUHacksX | All recommendations based on medical research</p>
-      </footer>
-    </div>
+        <main style={styles.main}>
+          <Routes>
+            <Route path="/" element={<DailyPage />} />
+            <Route path="/stats" element={<StatsPage />} />
+          </Routes>
+        </main>
+
+        <footer style={styles.footer}>
+          <p>Built for ConUHacksX | All recommendations based on medical research</p>
+        </footer>
+      </div>
+    </Router>
   );
 }
 

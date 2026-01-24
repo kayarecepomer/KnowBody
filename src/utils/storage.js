@@ -152,3 +152,40 @@ export function importHealthData(jsonData) {
     throw error;
   }
 }
+
+/**
+ * Get health data for a specific date
+ * @param {string} date - Date in ISO format (YYYY-MM-DD)
+ * @returns {Object|null} Health data for the date or null if not found
+ */
+export function getHealthDataByDate(date) {
+  const allData = getAllHealthData();
+  return allData.find(entry => entry.date === date) || null;
+}
+
+/**
+ * Get health data for the current month
+ * @returns {Array} Current month's health data
+ */
+export function getCurrentMonthData() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  
+  const startOfMonth = new Date(year, month, 1);
+  const endOfMonth = new Date(year, month + 1, 0);
+  
+  return getHealthDataByDateRange(
+    startOfMonth.toISOString().split('T')[0],
+    endOfMonth.toISOString().split('T')[0]
+  );
+}
+
+/**
+ * Get today's health data
+ * @returns {Object|null} Today's health data or null if not found
+ */
+export function getTodayData() {
+  const today = new Date().toISOString().split('T')[0];
+  return getHealthDataByDate(today);
+}

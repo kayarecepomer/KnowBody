@@ -7,21 +7,17 @@ test('renders Health Tracker title', () => {
   expect(titleElement).toBeInTheDocument();
 });
 
-test('renders Daily Health Metrics section', () => {
+test('renders navigation', () => {
   render(<App />);
-  const metricsTitle = screen.getByText(/Daily Health Metrics/i);
-  expect(metricsTitle).toBeInTheDocument();
+  const dailyNav = screen.getByText(/Daily/i);
+  const statsNav = screen.getByText(/Stats/i);
+  expect(dailyNav).toBeInTheDocument();
+  expect(statsNav).toBeInTheDocument();
 });
 
-test('renders Weekly Grade section', () => {
+test('renders Daily page by default', () => {
   render(<App />);
-  const gradeTitle = screen.getByText(/Your Weekly Health Grade/i);
-  expect(gradeTitle).toBeInTheDocument();
-});
-
-test('renders Health Alerts section', () => {
-  render(<App />);
-  const alertsTitle = screen.getByText(/Health Alerts/i);
-  expect(alertsTitle).toBeInTheDocument();
+  const dailyTitle = screen.getByText(/Daily Health Tracking/i);
+  expect(dailyTitle).toBeInTheDocument();
 });
 

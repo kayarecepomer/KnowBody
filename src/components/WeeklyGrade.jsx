@@ -1,5 +1,5 @@
 import React from 'react';
-import { calculateWeeklyGrade } from '../services/grading';
+import { calculateWeeklyGrade, getGradeColor } from '../services/grading';
 
 /**
  * WeeklyGrade - Displays the user's weekly health grade
@@ -7,14 +7,6 @@ import { calculateWeeklyGrade } from '../services/grading';
  */
 function WeeklyGrade({ weekData }) {
   const grade = calculateWeeklyGrade(weekData);
-
-  const getGradeColor = (letterGrade) => {
-    if (letterGrade.startsWith('A')) return '#4CAF50';
-    if (letterGrade.startsWith('B')) return '#8BC34A';
-    if (letterGrade.startsWith('C')) return '#FFC107';
-    if (letterGrade.startsWith('D')) return '#FF9800';
-    return '#F44336';
-  };
 
   return (
     <div style={styles.container}>
