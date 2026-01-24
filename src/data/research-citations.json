@@ -1,0 +1,80 @@
+{
+  "hydration": {
+    "title": "Adequate Daily Water Intake",
+    "source": "National Academies of Sciences, Engineering, and Medicine",
+    "year": 2004,
+    "summary": "Adequate daily fluid intake is about 15.5 cups (3.7 liters) for men and 11.5 cups (2.7 liters) for women. About 20% comes from food, with the remainder from beverages.",
+    "citation": "National Academies of Sciences, Engineering, and Medicine. 2004. Dietary Reference Intakes for Water, Potassium, Sodium, Chloride, and Sulfate. Washington, DC: The National Academies Press.",
+    "url": "https://doi.org/10.17226/10925",
+    "keyFindings": [
+      "Adequate hydration supports physical performance",
+      "Proper hydration aids cognitive function",
+      "Water is the best choice for hydration"
+    ]
+  },
+  "alcohol": {
+    "title": "Moderate Alcohol Consumption Guidelines",
+    "source": "U.S. Department of Health and Human Services and U.S. Department of Agriculture",
+    "year": 2020,
+    "summary": "Dietary Guidelines for Americans recommend that adults who choose to drink do so in moderation: up to 1 drink per day for women and up to 2 drinks per day for men.",
+    "citation": "U.S. Department of Agriculture and U.S. Department of Health and Human Services. Dietary Guidelines for Americans, 2020-2025. 9th Edition. December 2020.",
+    "url": "https://www.dietaryguidelines.gov",
+    "keyFindings": [
+      "Excessive alcohol use increases health risks",
+      "Moderate consumption may have some cardiovascular benefits",
+      "Any alcohol increases cancer risk"
+    ]
+  },
+  "smoking": {
+    "title": "Health Consequences of Smoking",
+    "source": "U.S. Surgeon General",
+    "year": 2014,
+    "summary": "The health consequences of smoking—50 years of progress: a report of the Surgeon General. Smoking remains the leading cause of preventable disease and death in the United States.",
+    "citation": "U.S. Department of Health and Human Services. The Health Consequences of Smoking—50 Years of Progress: A Report of the Surgeon General. Atlanta: U.S. Department of Health and Human Services, Centers for Disease Control and Prevention, National Center for Chronic Disease Prevention and Health Promotion, Office on Smoking and Health, 2014.",
+    "url": "https://www.cdc.gov/tobacco",
+    "keyFindings": [
+      "No safe level of smoking exists",
+      "Smoking damages nearly every organ in the body",
+      "Quitting smoking has immediate and long-term health benefits"
+    ]
+  },
+  "physical_activity": {
+    "title": "Physical Activity Guidelines",
+    "source": "World Health Organization",
+    "year": 2020,
+    "summary": "Adults should do at least 150-300 minutes of moderate-intensity aerobic physical activity throughout the week, or at least 75-150 minutes of vigorous-intensity aerobic physical activity.",
+    "citation": "World Health Organization. WHO guidelines on physical activity and sedentary behaviour. Geneva: World Health Organization; 2020.",
+    "url": "https://www.who.int/publications/i/item/9789240015128",
+    "keyFindings": [
+      "Regular physical activity prevents chronic diseases",
+      "10,000 steps per day is a good general target",
+      "Even small amounts of activity are beneficial"
+    ]
+  },
+  "heart_rate": {
+    "title": "Resting Heart Rate and Cardiovascular Health",
+    "source": "American Heart Association",
+    "year": 2021,
+    "summary": "A normal resting heart rate for adults ranges from 60 to 100 beats per minute. A lower resting heart rate generally indicates better cardiovascular fitness.",
+    "citation": "American Heart Association. All About Heart Rate (Pulse). 2021.",
+    "url": "https://www.heart.org",
+    "keyFindings": [
+      "Lower resting heart rate indicates better fitness",
+      "Regular exercise can lower resting heart rate",
+      "Unusually high or low heart rates should be evaluated"
+    ]
+  },
+  "weekly_tracking": {
+    "title": "Benefits of Health Tracking",
+    "source": "Journal of Medical Internet Research",
+    "year": 2019,
+    "summary": "Self-monitoring of health behaviors through tracking apps is associated with improved health outcomes and increased adherence to health goals.",
+    "citation": "Shin, G., Jarrahi, M. H., Fei, Y., Karami, A., Gafinowitz, N., Byun, A., & Lu, X. (2019). Wearable activity trackers, accuracy, adoption, acceptance and health impact: A systematic literature review. Journal of Biomedical Informatics, 93, 103153.",
+    "url": "https://doi.org/10.1016/j.jbi.2019.103153",
+    "keyFindings": [
+      "Regular tracking increases health awareness",
+      "Self-monitoring improves goal achievement",
+      "Visual feedback enhances motivation"
+    ]
+  }
+}
