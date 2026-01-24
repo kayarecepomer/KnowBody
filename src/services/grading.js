@@ -150,3 +150,107 @@ function getRecommendation(totalScore, breakdown) {
     return `Let's work on your health together. ${recommendations[weakest[0]]}`;
   }
 }
+
+/**
+ * Calculate daily health grade from single day data
+ * @param {Object} dayData - Single day's health data
+ * @returns {Object} Grade object with letter, score, breakdown, and recommendation
+ */
+export function calculateDailyGrade(dayData) {
+  if (!dayData) {
+    return {
+      letter: 'N/A',
+      score: 0,
+      breakdown: {
+        hydration: 0,
+        alcohol: 0,
+        smoking: 0,
+        activity: 0
+      },
+      recommendation: 'Enter your daily metrics to get a grade!'
+    };
+  }
+
+  // Calculate scores for each category (25 points each)
+  const hydrationScore = calculateDailyHydrationScore(dayData);
+  const alcoholScore = calculateDailyAlcoholScore(dayData);
+  const smokingScore = calculateDailySmokingScore(dayData);
+  const activityScore = calculateDailyActivityScore(dayData);
+
+  const totalScore = hydrationScore + alcoholScore + smokingScore + activityScore;
+  const letter = getLetterGrade(totalScore);
+  const recommendation = getRecommendation(totalScore, {
+    hydration: hydrationScore,
+    alcohol: alcoholScore,
+    smoking: smokingScore,
+    activity: activityScore
+  });
+
+  return {
+    letter,
+    score: Math.round(totalScore),
+    breakdown: {
+      hydration: Math.round(hydrationScore),
+      alcohol: Math.round(alcoholScore),
+      smoking: Math.round(smokingScore),
+      activity: Math.round(activityScore)
+    },
+    recommendation
+  };
+}
+
+/**
+ * Calculate daily hydration score (0-25 points)
+ */
+function calculateDailyHydrationScore(dayData) {
+  const water = dayData.waterGlasses || 0;
+  return Math.min(25, (water / 8) * 25);
+}
+
+/**
+ * Calculate daily alcohol moderation score (0-25 points)
+ */
+function calculateDailyAlcoholScore(dayData) {
+  const alcohol = dayData.alcoholDrinks || 0;
+  
+  if (alcohol === 0) return 25;
+  if (alcohol <= 1.5) return 20;
+  if (alcohol <= 3) return 15;
+  if (alcohol <= 5) return 10;
+  return 5;
+}
+
+/**
+ * Calculate daily smoking score (0-25 points)
+ */
+function calculateDailySmokingScore(dayData) {
+  const cigarettes = dayData.cigarettes || 0;
+  
+  if (cigarettes === 0) return 25;
+  if (cigarettes <= 1) return 15;
+  if (cigarettes <= 5) return 10;
+  return 5;
+}
+
+/**
+ * Calculate daily activity score (0-25 points)
+ */
+function calculateDailyActivityScore(dayData) {
+  const steps = dayData.steps || 0;
+  return Math.min(25, (steps / 10000) * 25);
+}
+
+/**
+ * Get enhanced color for grade letter
+ * @param {string} letterGrade - Letter grade (e.g., 'A+', 'B-', 'F')
+ * @returns {string} Hex color code
+ */
+export function getGradeColor(letterGrade) {
+  if (letterGrade === 'S+') return '#1B5E20'; // Dark green
+  if (letterGrade.startsWith('A')) return '#4CAF50'; // Green
+  if (letterGrade.startsWith('B')) return '#FFC107'; // Yellow
+  if (letterGrade.startsWith('C')) return '#FF9800'; // Orange
+  if (letterGrade.startsWith('D')) return '#F44336'; // Red
+  if (letterGrade === 'F') return '#B71C1C'; // Dark red
+  return '#9E9E9E'; // Gray for N/A
+}

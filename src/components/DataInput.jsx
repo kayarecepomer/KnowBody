@@ -5,7 +5,7 @@ import { saveHealthData } from '../utils/storage';
  * DataInput - Component for user to input daily health metrics
  * Captures cigarettes, alcohol, and water intake
  */
-function DataInput() {
+function DataInput({ onDataSaved }) {
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
     cigarettes: 0,
@@ -35,6 +35,11 @@ function DataInput() {
     try {
       saveHealthData(formData);
       setMessage('Data saved successfully!');
+      
+      // Notify parent component if callback is provided
+      if (onDataSaved) {
+        onDataSaved();
+      }
       
       // Reset form after 2 seconds
       setTimeout(() => {

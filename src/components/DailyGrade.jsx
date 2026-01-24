@@ -1,16 +1,16 @@
 import React from 'react';
-import { calculateWeeklyGrade, getGradeColor } from '../services/grading';
+import { calculateDailyGrade, getGradeColor } from '../services/grading';
 
 /**
- * WeeklyGrade - Displays the user's weekly health grade
- * Shows letter grade (A+, B-, etc.) and score breakdown
+ * DailyGrade - Displays the user's daily health grade
+ * Shows letter grade (A+, B-, etc.) and score breakdown for a single day
  */
-function WeeklyGrade({ weekData }) {
-  const grade = calculateWeeklyGrade(weekData);
+function DailyGrade({ dayData }) {
+  const grade = calculateDailyGrade(dayData);
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Your Weekly Health Grade</h2>
+      <h2 style={styles.title}>Today's Health Grade</h2>
       
       <div style={{
         ...styles.gradeDisplay,
@@ -114,4 +114,4 @@ const styles = {
   }
 };
 
-export default WeeklyGrade;
+export default DailyGrade;
