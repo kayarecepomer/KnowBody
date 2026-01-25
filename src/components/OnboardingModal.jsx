@@ -68,7 +68,7 @@ function OnboardingModal({ isOpen, onComplete }) {
     <div style={styles.overlay}>
       <div style={styles.modal}>
         <div style={styles.header}>
-          <h2 style={styles.title}>Welcome to Health Tracker! 🏃‍♂️</h2>
+          <h2 style={styles.title}>Welcome to KnowBody! 🏃‍♂️</h2>
           <p style={styles.subtitle}>
             Let's personalize your experience. Tell us a bit about yourself:
           </p>

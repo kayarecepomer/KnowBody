@@ -9,7 +9,7 @@ import StatsPage from './pages/StatsPage';
 import StreakPage from './pages/StreakPage';
 import ReportPage from './pages/ReportPage';
 import LifeExpectancyPage from './pages/LifeExpectancyPage';
-import { Activity, Settings } from 'lucide-react';
+import { Settings } from 'lucide-react';
 
 function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -28,8 +28,8 @@ function App() {
       <div className="App">
         <header style={styles.header}>
           <div style={styles.headerContent}>
-            <Activity size={40} color="#4CAF50" />
-            <h1 style={styles.title}>Health Tracker</h1>
+            <img src="/images/pulse-icon.png" alt="Pulse" style={styles.logo} />
+            <h1 style={styles.title}>KnowBody</h1>
           </div>
           <p style={styles.subtitle}>Research-based health tracking for better living</p>
           
@@ -87,9 +87,15 @@ const styles = {
     alignItems: 'center',
     gap: '15px'
   },
+  logo: {
+    width: '40px',
+    height: '40px',
+    objectFit: 'contain'
+  },
   title: {
     margin: 0,
-    fontSize: '2.5em'
+    fontSize: '2.5em',
+    color: '#d0d0d0'
   },
   subtitle: {
     margin: '10px 0 0 0',
