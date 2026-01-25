@@ -62,7 +62,7 @@ function AppleHealthImport({ onDataImported }) {
       console.error('XML parsing error:', error);
       return {
         success: false,
-        error: error.message || 'Failed to parse XML file. File may be too large or corrupted.'
+        error: error.message || 'Failed to parse XML file. Please check the file format.'
       };
     }
   };
