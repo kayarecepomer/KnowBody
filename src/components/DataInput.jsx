@@ -189,10 +189,9 @@ const styles = {
     padding: '30px',
     backgroundColor: '#ffffff',
     borderRadius: '12px',
-    maxWidth: '800px',
+    maxWidth: '500px',
     margin: '20px auto',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-    minHeight: '400px'
+    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
   },
   title: {
     textAlign: 'center',
@@ -206,8 +205,8 @@ const styles = {
     gap: '25px'
   },
   metricsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    display: 'flex',
+    flexDirection: 'column',
     gap: '20px',
     marginBottom: '10px'
   },
