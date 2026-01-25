@@ -75,8 +75,8 @@ function StreakPage() {
       <div style={styles.statsGrid}>
         <div style={styles.statCard}>
           <Trophy size={40} color="#FFD700" />
-          <div style={styles.statNumber}>{stats.longestStreak}</div>
-          <div style={styles.statLabel}>Longest Streak</div>
+          <div style={styles.statNumber}>{stats.currentStreak}</div>
+          <div style={styles.statLabel}>Current Streak</div>
         </div>
 
         <div style={styles.statCard}>

@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders Health Tracker title', () => {
+test('renders KnowBody title', () => {
   render(<App />);
-  const titleElement = screen.getByText(/Health Tracker/i);
+  const titleElement = screen.getByText(/KnowBody/i);
   expect(titleElement).toBeInTheDocument();
 });
 

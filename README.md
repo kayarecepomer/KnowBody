@@ -1,6 +1,6 @@
 # No-Name-Yet
 
-Research-based health tracking application for ConUHacksX
+Research-based health tracking application for ConUHacks
 
 ## Overview
 

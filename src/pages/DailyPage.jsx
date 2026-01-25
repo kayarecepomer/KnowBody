@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Flame } from 'lucide-react';
 import DataInput from '../components/DataInput';
 import DailyGrade from '../components/DailyGrade';
+import AppleHealthImport from '../components/AppleHealthImport';
 import { getTodayData, getStreakData } from '../utils/storage';
 import { getStreakColor } from '../services/streakService';
 import { updateStreakWithGrade, calculateDailyGrade } from '../services/grading';
@@ -41,6 +42,11 @@ function DailyPage() {
     }
   };
 
+  const handleDataImported = () => {
+    // Refresh data after import
+    loadTodayData();
+  };
+
   const streakColor = getStreakColor(currentStreak);
 
   return (
@@ -62,6 +68,11 @@ function DailyPage() {
       <DataInput onDataSaved={loadTodayData} />
       
       <DailyGrade dayData={todayData} />
+
+      {/* Apple Health Import at bottom */}
+      <div style={styles.importSection}>
+        <AppleHealthImport onDataImported={handleDataImported} />
+      </div>
     </div>
   );
 }
@@ -111,6 +122,11 @@ const styles = {
     color: '#666',
     fontWeight: '600',
     marginTop: '5px'
+  },
+  importSection: {
+    marginTop: '40px',
+    paddingTop: '30px',
+    borderTop: '2px solid #e0e0e0'
   }
 };
 
