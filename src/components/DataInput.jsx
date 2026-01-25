@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Save } from 'lucide-react';
 import { saveHealthData, getHealthDataByDate } from '../utils/storage';
 import { getSelectedDate } from './SettingsModal';
+import { updateStreakAfterDataChange } from '../services/streakService';
 
 /**
  * DataInput - Component for user to input daily health metrics
@@ -67,6 +68,10 @@ function DataInput({ onDataSaved }) {
       const dataToSave = { ...formData, date: selectedDate };
       
       saveHealthData(dataToSave);
+      
+      // Recalculate streak after saving data
+      updateStreakAfterDataChange();
+      
       setMessage('Data saved successfully!');
       
       // Notify parent component if callback is provided

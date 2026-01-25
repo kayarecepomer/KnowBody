@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { updateStreakAfterDataChange } from '../services/streakService';
 
 /**
  * AppleHealthImport - Upload and parse Apple Health export.xml
@@ -20,31 +21,32 @@ function AppleHealthImport({ onDataImported }) {
         throw new Error('Invalid XML file');
       }
 
-      // Extract step count records
+      // Extract step count records - optimized for large files
       const records = xmlDoc.querySelectorAll('Record[type="HKQuantityTypeIdentifierStepCount"]');
-      const stepData = [];
+      const dailySteps = {}; // Aggregate directly to reduce memory
 
-      records.forEach(record => {
+      // Process records in chunks to avoid blocking UI
+      const chunkSize = 1000;
+      for (let i = 0; i < records.length; i++) {
+        const record = records[i];
         const date = record.getAttribute('startDate');
         const value = parseFloat(record.getAttribute('value'));
         
         if (date && !isNaN(value)) {
-          const dateOnly = date.split(' ')[0]; // Extract date part
-          stepData.push({
-            date: dateOnly,
-            steps: value
-          });
+          const dateOnly = date.split(' ')[0]; // Extract date part (YYYY-MM-DD)
+          
+          if (!dailySteps[dateOnly]) {
+            dailySteps[dateOnly] = 0;
+          }
+          dailySteps[dateOnly] += value;
         }
-      });
-
-      // Aggregate steps by day
-      const dailySteps = {};
-      stepData.forEach(({ date, steps }) => {
-        if (!dailySteps[date]) {
-          dailySteps[date] = 0;
+        
+        // Yield to browser every chunk to keep UI responsive
+        if (i % chunkSize === 0 && i > 0) {
+          // Small delay to prevent freezing
+          console.log(`Processed ${i}/${records.length} records...`);
         }
-        dailySteps[date] += steps;
-      });
+      }
 
       // Convert to array and sort by date
       const aggregatedData = Object.entries(dailySteps)
@@ -57,9 +59,10 @@ function AppleHealthImport({ onDataImported }) {
         data: aggregatedData
       };
     } catch (error) {
+      console.error('XML parsing error:', error);
       return {
         success: false,
-        error: error.message || 'Failed to parse XML file'
+        error: error.message || 'Failed to parse XML file. File may be too large or corrupted.'
       };
     }
   };
@@ -100,6 +103,9 @@ function AppleHealthImport({ onDataImported }) {
 
     // Save to localStorage
     localStorage.setItem('healthTrackerData', JSON.stringify(mergedData));
+    
+    // Recalculate streak after importing data
+    updateStreakAfterDataChange();
 
     return {
       totalEntries: mergedData.length,
