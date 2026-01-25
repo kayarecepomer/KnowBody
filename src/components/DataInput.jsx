@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Cigarette, Wine, Droplets, Save } from 'lucide-react';
-import { saveHealthData } from '../utils/storage';
+import { saveHealthData, getHealthDataByDate } from '../utils/storage';
+import { getSelectedDate } from './SettingsModal';
 
 /**
  * DataInput - Component for user to input daily health metrics
  * Uses increment buttons for cigarettes, alcohol, and water intake
+ * Date is now managed through Settings
  */
 function DataInput({ onDataSaved }) {
   const [formData, setFormData] = useState({
@@ -16,15 +18,22 @@ function DataInput({ onDataSaved }) {
 
   const [message, setMessage] = useState('');
 
-  /**
-   * Handle date change
-   */
-  const handleDateChange = (e) => {
-    setFormData(prev => ({
-      ...prev,
-      date: e.target.value
-    }));
-  };
+  // Load data for the selected date from settings
+  useEffect(() => {
+    const selectedDate = getSelectedDate();
+    const existingData = getHealthDataByDate(selectedDate);
+    
+    if (existingData) {
+      setFormData(existingData);
+    } else {
+      setFormData({
+        date: selectedDate,
+        cigarettes: 0,
+        alcoholDrinks: 0,
+        waterGlasses: 0
+      });
+    }
+  }, []);
 
   /**
    * Increment a metric value
@@ -53,7 +62,11 @@ function DataInput({ onDataSaved }) {
     e.preventDefault();
     
     try {
-      saveHealthData(formData);
+      // Use selected date from settings
+      const selectedDate = getSelectedDate();
+      const dataToSave = { ...formData, date: selectedDate };
+      
+      saveHealthData(dataToSave);
       setMessage('Data saved successfully!');
       
       // Notify parent component if callback is provided
@@ -75,18 +88,6 @@ function DataInput({ onDataSaved }) {
     <div style={styles.container}>
       <h2 style={styles.title}>Track Your Day</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
-        {/* Date Input */}
-        <div style={styles.dateGroup}>
-          <label style={styles.dateLabel}>Date:</label>
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleDateChange}
-            style={styles.dateInput}
-            required
-          />
-        </div>
 
         {/* Metrics Section */}
         <div style={styles.metricsGrid}>
@@ -190,7 +191,8 @@ const styles = {
     borderRadius: '12px',
     maxWidth: '800px',
     margin: '20px auto',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+    minHeight: '400px'
   },
   title: {
     textAlign: 'center',
@@ -202,25 +204,6 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     gap: '25px'
-  },
-  dateGroup: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '15px',
-    marginBottom: '10px'
-  },
-  dateLabel: {
-    fontWeight: 'bold',
-    fontSize: '18px',
-    color: '#555'
-  },
-  dateInput: {
-    padding: '10px 15px',
-    borderRadius: '8px',
-    border: '2px solid #ddd',
-    fontSize: '16px',
-    fontWeight: '600'
   },
   metricsGrid: {
     display: 'grid',

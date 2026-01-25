@@ -1,5 +1,4 @@
 import React from 'react';
-import { getGradeColor } from '../services/grading';
 
 /**
  * StreakCalendar - Duolingo-style calendar showing streak history

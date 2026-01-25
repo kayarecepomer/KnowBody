@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, BarChart3, Flame } from 'lucide-react';
+import { Home, BarChart3, Flame, FileText } from 'lucide-react';
 
 /**
- * Navigation - Navigation tabs for switching between Daily and Stats pages
+ * Navigation - Navigation tabs for switching between pages
  */
 function Navigation() {
   const location = useLocation();
   const isDaily = location.pathname === '/';
   const isStats = location.pathname === '/stats';
   const isStreak = location.pathname === '/streak';
+  const isReports = location.pathname === '/reports';
 
   return (
     <nav style={styles.nav}>
@@ -44,6 +45,17 @@ function Navigation() {
       >
         <BarChart3 size={20} />
         <span>Stats</span>
+      </Link>
+
+      <Link
+        to="/reports"
+        style={{
+          ...styles.navItem,
+          ...(isReports ? styles.navItemActive : {})
+        }}
+      >
+        <FileText size={20} />
+        <span>Reports</span>
       </Link>
     </nav>
   );

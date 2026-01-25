@@ -59,7 +59,6 @@ export function calculateStreakData(gradeHistory = []) {
   });
 
   // Current streak is the streak at the most recent date
-  const today = new Date().toISOString().split('T')[0];
   const mostRecentEntry = sortedHistory[sortedHistory.length - 1];
   
   // Calculate current streak by going backwards from the most recent entry

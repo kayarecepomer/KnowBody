@@ -3,7 +3,7 @@ import { Flame } from 'lucide-react';
 import DataInput from '../components/DataInput';
 import DailyGrade from '../components/DailyGrade';
 import { getTodayData, getStreakData } from '../utils/storage';
-import { getStreakColor, getStreakMessage } from '../services/streakService';
+import { getStreakColor } from '../services/streakService';
 import { updateStreakWithGrade, calculateDailyGrade } from '../services/grading';
 
 /**
@@ -42,7 +42,6 @@ function DailyPage() {
   };
 
   const streakColor = getStreakColor(currentStreak);
-  const streakMessage = getStreakMessage(currentStreak);
 
   return (
     <div style={styles.container}>
