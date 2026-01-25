@@ -66,7 +66,7 @@ function AppleHealthImport({ onDataImported }) {
 
   const mergeWithExistingData = (importedData) => {
     // Get existing health data
-    const existingDataStr = localStorage.getItem('healthData');
+    const existingDataStr = localStorage.getItem('healthTrackerData');
     const existingData = existingDataStr ? JSON.parse(existingDataStr) : [];
 
     // Create a map of existing data by date
@@ -99,7 +99,7 @@ function AppleHealthImport({ onDataImported }) {
       .sort((a, b) => new Date(b.date) - new Date(a.date));
 
     // Save to localStorage
-    localStorage.setItem('healthData', JSON.stringify(mergedData));
+    localStorage.setItem('healthTrackerData', JSON.stringify(mergedData));
 
     return {
       totalEntries: mergedData.length,

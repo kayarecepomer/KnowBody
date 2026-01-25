@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Cigarette, Wine, Droplets, Save } from 'lucide-react';
+import { Save } from 'lucide-react';
 import { saveHealthData, getHealthDataByDate } from '../utils/storage';
 import { getSelectedDate } from './SettingsModal';
 
@@ -93,9 +93,6 @@ function DataInput({ onDataSaved }) {
         <div style={styles.metricsGrid}>
           {/* Cigarettes */}
           <div style={styles.metricCard}>
-            <div style={styles.metricIcon}>
-              <Cigarette size={40} color="#F44336" />
-            </div>
             <div style={styles.metricName}>🚬 Cigarettes</div>
             <div style={styles.metricValue}>{formData.cigarettes}</div>
             <div style={styles.buttonGroup}>
@@ -118,9 +115,6 @@ function DataInput({ onDataSaved }) {
 
           {/* Alcohol */}
           <div style={styles.metricCard}>
-            <div style={styles.metricIcon}>
-              <Wine size={40} color="#9C27B0" />
-            </div>
             <div style={styles.metricName}>🍷 Drinks</div>
             <div style={styles.metricValue}>{formData.alcoholDrinks}</div>
             <div style={styles.buttonGroup}>
@@ -143,9 +137,6 @@ function DataInput({ onDataSaved }) {
 
           {/* Water */}
           <div style={styles.metricCard}>
-            <div style={styles.metricIcon}>
-              <Droplets size={40} color="#2196F3" />
-            </div>
             <div style={styles.metricName}>💧 Water Glasses</div>
             <div style={styles.metricValue}>{formData.waterGlasses}</div>
             <div style={styles.buttonGroup}>
@@ -221,11 +212,6 @@ const styles = {
     transition: 'transform 0.2s, box-shadow 0.2s',
     boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
     cursor: 'default'
-  },
-  metricIcon: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
   },
   metricName: {
     fontSize: '18px',
