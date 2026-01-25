@@ -4,6 +4,7 @@ import './App.css';
 import Navigation from './components/Navigation';
 import DailyPage from './pages/DailyPage';
 import StatsPage from './pages/StatsPage';
+import StreakPage from './pages/StreakPage';
 import { Activity } from 'lucide-react';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Routes>
             <Route path="/" element={<DailyPage />} />
             <Route path="/stats" element={<StatsPage />} />
+            <Route path="/streak" element={<StreakPage />} />
           </Routes>
         </main>
 
