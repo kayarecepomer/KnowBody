@@ -1,8 +1,8 @@
-# KnowBody
+<img width="341" height="98" alt="Screenshot 2026-01-25 at 9 24 33 AM" src="https://github.com/user-attachments/assets/8385d7c0-651f-4880-b41a-c3b43bc95fa3" />
 
 **Built in 24 hours for ConUHacks X**
 
-A research-based health tracking application developed by 1 University of Toronto Computer Science student and 1 Med School student. We invested 12 hours searching and finding the correct researches, then hand-picked 18 different studies through hours of hard work. We do not use LLMs or other AI tools to suggest anything to users—we believe they are more valuable than that. Our algorithms are built only and only from those 18 hand-picked researches.
+A research-based health tracking application developed by a University of Toronto Computer Science student and a Med School student. We invested 12 hours searching and finding the correct researches, then hand-picked 18 different studies through hours of hard work. We do not use LLMs or other AI tools to suggest anything to users—we believe they are more valuable than that. Our algorithms are built only and only from those 18 hand-picked researches.
 
 ## Overview
 
