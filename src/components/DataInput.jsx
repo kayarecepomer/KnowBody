@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { Cigarette, Wine, Droplets, Save } from 'lucide-react';
 import { saveHealthData } from '../utils/storage';
 
 /**
  * DataInput - Component for user to input daily health metrics
- * Captures cigarettes, alcohol, and water intake
+ * Uses increment buttons for cigarettes, alcohol, and water intake
  */
 function DataInput({ onDataSaved }) {
   const [formData, setFormData] = useState({
@@ -16,13 +17,32 @@ function DataInput({ onDataSaved }) {
   const [message, setMessage] = useState('');
 
   /**
-   * Handle input changes
+   * Handle date change
    */
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleDateChange = (e) => {
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'date' ? value : parseInt(value, 10) || 0
+      date: e.target.value
+    }));
+  };
+
+  /**
+   * Increment a metric value
+   */
+  const increment = (field) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: prev[field] + 1
+    }));
+  };
+
+  /**
+   * Decrement a metric value (minimum 0)
+   */
+  const decrement = (field) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: Math.max(0, prev[field] - 1)
     }));
   };
 
@@ -41,7 +61,7 @@ function DataInput({ onDataSaved }) {
         onDataSaved();
       }
       
-      // Reset form after 2 seconds
+      // Reset message after 2 seconds
       setTimeout(() => {
         setMessage('');
       }, 2000);
@@ -53,68 +73,106 @@ function DataInput({ onDataSaved }) {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Daily Health Metrics</h2>
+      <h2 style={styles.title}>Track Your Day</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>
-            Date:
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              style={styles.input}
-              required
-            />
-          </label>
+        {/* Date Input */}
+        <div style={styles.dateGroup}>
+          <label style={styles.dateLabel}>Date:</label>
+          <input
+            type="date"
+            name="date"
+            value={formData.date}
+            onChange={handleDateChange}
+            style={styles.dateInput}
+            required
+          />
         </div>
 
-        <div style={styles.formGroup}>
-          <label style={styles.label}>
-            Cigarettes:
-            <input
-              type="number"
-              name="cigarettes"
-              value={formData.cigarettes}
-              onChange={handleChange}
-              min="0"
-              style={styles.input}
-            />
-          </label>
+        {/* Metrics Section */}
+        <div style={styles.metricsGrid}>
+          {/* Cigarettes */}
+          <div style={styles.metricCard}>
+            <div style={styles.metricIcon}>
+              <Cigarette size={40} color="#F44336" />
+            </div>
+            <div style={styles.metricName}>🚬 Cigarettes</div>
+            <div style={styles.metricValue}>{formData.cigarettes}</div>
+            <div style={styles.buttonGroup}>
+              <button
+                type="button"
+                onClick={() => decrement('cigarettes')}
+                style={styles.decrementButton}
+              >
+                −
+              </button>
+              <button
+                type="button"
+                onClick={() => increment('cigarettes')}
+                style={styles.incrementButton}
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          {/* Alcohol */}
+          <div style={styles.metricCard}>
+            <div style={styles.metricIcon}>
+              <Wine size={40} color="#9C27B0" />
+            </div>
+            <div style={styles.metricName}>🍷 Drinks</div>
+            <div style={styles.metricValue}>{formData.alcoholDrinks}</div>
+            <div style={styles.buttonGroup}>
+              <button
+                type="button"
+                onClick={() => decrement('alcoholDrinks')}
+                style={styles.decrementButton}
+              >
+                −
+              </button>
+              <button
+                type="button"
+                onClick={() => increment('alcoholDrinks')}
+                style={styles.incrementButton}
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          {/* Water */}
+          <div style={styles.metricCard}>
+            <div style={styles.metricIcon}>
+              <Droplets size={40} color="#2196F3" />
+            </div>
+            <div style={styles.metricName}>💧 Water Glasses</div>
+            <div style={styles.metricValue}>{formData.waterGlasses}</div>
+            <div style={styles.buttonGroup}>
+              <button
+                type="button"
+                onClick={() => decrement('waterGlasses')}
+                style={styles.decrementButton}
+              >
+                −
+              </button>
+              <button
+                type="button"
+                onClick={() => increment('waterGlasses')}
+                style={styles.incrementButton}
+              >
+                +
+              </button>
+            </div>
+          </div>
         </div>
 
-        <div style={styles.formGroup}>
-          <label style={styles.label}>
-            Alcohol (drinks):
-            <input
-              type="number"
-              name="alcoholDrinks"
-              value={formData.alcoholDrinks}
-              onChange={handleChange}
-              min="0"
-              style={styles.input}
-            />
-          </label>
-        </div>
-
-        <div style={styles.formGroup}>
-          <label style={styles.label}>
-            Water (glasses):
-            <input
-              type="number"
-              name="waterGlasses"
-              value={formData.waterGlasses}
-              onChange={handleChange}
-              min="0"
-              style={styles.input}
-            />
-          </label>
-        </div>
-
-        <button type="submit" style={styles.button}>
-          Save Data
+        {/* Save Button */}
+        <button type="submit" style={styles.saveButton}>
+          <Save size={20} />
+          <span>Save Data</span>
         </button>
 
+        {/* Success/Error Message */}
         {message && (
           <div style={message.includes('Error') ? styles.errorMessage : styles.successMessage}>
             {message}
@@ -127,61 +185,157 @@ function DataInput({ onDataSaved }) {
 
 const styles = {
   container: {
-    padding: '20px',
-    backgroundColor: '#f5f5f5',
-    borderRadius: '8px',
-    maxWidth: '500px',
-    margin: '20px auto'
+    padding: '30px',
+    backgroundColor: '#ffffff',
+    borderRadius: '12px',
+    maxWidth: '800px',
+    margin: '20px auto',
+    boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
   },
   title: {
     textAlign: 'center',
     color: '#333',
-    marginBottom: '20px'
+    marginBottom: '25px',
+    fontSize: '2em'
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '15px'
+    gap: '25px'
   },
-  formGroup: {
+  dateGroup: {
     display: 'flex',
-    flexDirection: 'column'
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '15px',
+    marginBottom: '10px'
   },
-  label: {
+  dateLabel: {
     fontWeight: 'bold',
-    marginBottom: '5px',
+    fontSize: '18px',
     color: '#555'
   },
-  input: {
-    padding: '8px',
-    borderRadius: '4px',
-    border: '1px solid #ddd',
+  dateInput: {
+    padding: '10px 15px',
+    borderRadius: '8px',
+    border: '2px solid #ddd',
     fontSize: '16px',
-    marginTop: '5px'
+    fontWeight: '600'
   },
-  button: {
-    padding: '12px',
+  metricsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gap: '20px',
+    marginBottom: '10px'
+  },
+  metricCard: {
+    backgroundColor: '#f9f9f9',
+    borderRadius: '12px',
+    padding: '25px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '15px',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+    cursor: 'default'
+  },
+  metricIcon: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  metricName: {
+    fontSize: '18px',
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center'
+  },
+  metricValue: {
+    fontSize: '48px',
+    fontWeight: 'bold',
+    color: '#4CAF50',
+    lineHeight: '1'
+  },
+  buttonGroup: {
+    display: 'flex',
+    gap: '10px',
+    width: '100%'
+  },
+  decrementButton: {
+    flex: 1,
+    padding: '15px',
+    backgroundColor: '#f44336',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '24px',
+    fontWeight: 'bold',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s, transform 0.1s',
+    ':hover': {
+      backgroundColor: '#d32f2f'
+    },
+    ':active': {
+      transform: 'scale(0.95)'
+    }
+  },
+  incrementButton: {
+    flex: 1,
+    padding: '15px',
     backgroundColor: '#4CAF50',
     color: 'white',
     border: 'none',
-    borderRadius: '4px',
-    fontSize: '16px',
+    borderRadius: '8px',
+    fontSize: '24px',
+    fontWeight: 'bold',
     cursor: 'pointer',
-    fontWeight: 'bold'
+    transition: 'background-color 0.2s, transform 0.1s',
+    ':hover': {
+      backgroundColor: '#45a049'
+    },
+    ':active': {
+      transform: 'scale(0.95)'
+    }
+  },
+  saveButton: {
+    padding: '18px',
+    backgroundColor: '#2196F3',
+    color: 'white',
+    border: 'none',
+    borderRadius: '8px',
+    fontSize: '18px',
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '10px',
+    transition: 'background-color 0.2s, transform 0.1s',
+    ':hover': {
+      backgroundColor: '#1976D2'
+    },
+    ':active': {
+      transform: 'scale(0.98)'
+    }
   },
   successMessage: {
-    padding: '10px',
+    padding: '15px',
     backgroundColor: '#d4edda',
     color: '#155724',
-    borderRadius: '4px',
-    textAlign: 'center'
+    borderRadius: '8px',
+    textAlign: 'center',
+    fontWeight: '600',
+    fontSize: '16px'
   },
   errorMessage: {
-    padding: '10px',
+    padding: '15px',
     backgroundColor: '#f8d7da',
     color: '#721c24',
-    borderRadius: '4px',
-    textAlign: 'center'
+    borderRadius: '8px',
+    textAlign: 'center',
+    fontWeight: '600',
+    fontSize: '16px'
   }
 };
 
