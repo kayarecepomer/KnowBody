@@ -21,7 +21,7 @@ A comprehensive health tracking application that helps users monitor daily healt
 - Node.js (v14 or higher)
 - npm or yarn
 
-### Installation
+### installation
 
 1. Clone the repository:
 ```bash
