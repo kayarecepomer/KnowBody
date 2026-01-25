@@ -4,6 +4,7 @@
  */
 
 const STORAGE_KEY = 'healthTrackerData';
+const STREAK_STORAGE_KEY = 'healthTrackerStreak';
 
 /**
  * Save health data for a specific date
@@ -188,4 +189,45 @@ export function getCurrentMonthData() {
 export function getTodayData() {
   const today = new Date().toISOString().split('T')[0];
   return getHealthDataByDate(today);
+}
+
+/**
+ * Save streak data to storage
+ * @param {Object} streakData - Streak data to save
+ */
+export function saveStreakData(streakData) {
+  try {
+    localStorage.setItem(STREAK_STORAGE_KEY, JSON.stringify(streakData));
+    return true;
+  } catch (error) {
+    console.error('Error saving streak data:', error);
+    throw error;
+  }
+}
+
+/**
+ * Get streak data from storage
+ * @returns {Object|null} Streak data or null if not found
+ */
+export function getStreakData() {
+  try {
+    const data = localStorage.getItem(STREAK_STORAGE_KEY);
+    return data ? JSON.parse(data) : null;
+  } catch (error) {
+    console.error('Error retrieving streak data:', error);
+    return null;
+  }
+}
+
+/**
+ * Clear streak data from storage
+ */
+export function clearStreakData() {
+  try {
+    localStorage.removeItem(STREAK_STORAGE_KEY);
+    return true;
+  } catch (error) {
+    console.error('Error clearing streak data:', error);
+    throw error;
+  }
 }
