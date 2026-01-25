@@ -22,13 +22,17 @@ function AppleHealthImport({ onDataImported }) {
       }
 
       // Extract step count records - optimized for large files
-      const records = xmlDoc.querySelectorAll('Record[type="HKQuantityTypeIdentifierStepCount"]');
+      const stepRecords = xmlDoc.querySelectorAll('Record[type="HKQuantityTypeIdentifierStepCount"]');
       const dailySteps = {}; // Aggregate directly to reduce memory
 
-      // Process records in chunks to avoid blocking UI
+      // Extract heart rate records
+      const hrRecords = xmlDoc.querySelectorAll('Record[type="HKQuantityTypeIdentifierHeartRate"]');
+      const dailyHeartRates = {}; // Store all HR readings per day
+
+      // Process step records in chunks to avoid blocking UI
       const chunkSize = 1000;
-      for (let i = 0; i < records.length; i++) {
-        const record = records[i];
+      for (let i = 0; i < stepRecords.length; i++) {
+        const record = stepRecords[i];
         const date = record.getAttribute('startDate');
         const value = parseFloat(record.getAttribute('value'));
         
@@ -43,19 +47,50 @@ function AppleHealthImport({ onDataImported }) {
         
         // Yield to browser every chunk to keep UI responsive
         if (i % chunkSize === 0 && i > 0) {
-          // Small delay to prevent freezing
-          console.log(`Processed ${i}/${records.length} records...`);
+          console.log(`Processed ${i}/${stepRecords.length} step records...`);
         }
       }
 
-      // Convert to array and sort by date
-      const aggregatedData = Object.entries(dailySteps)
-        .map(([date, steps]) => ({ date, steps: Math.round(steps) }))
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
+      // Process heart rate records
+      for (let i = 0; i < hrRecords.length; i++) {
+        const record = hrRecords[i];
+        const date = record.getAttribute('startDate');
+        const value = parseFloat(record.getAttribute('value'));
+        
+        if (date && !isNaN(value)) {
+          const dateOnly = date.split(' ')[0];
+          
+          if (!dailyHeartRates[dateOnly]) {
+            dailyHeartRates[dateOnly] = [];
+          }
+          dailyHeartRates[dateOnly].push(value);
+        }
+        
+        if (i % chunkSize === 0 && i > 0) {
+          console.log(`Processed ${i}/${hrRecords.length} heart rate records...`);
+        }
+      }
+
+      // Calculate average heart rate per day
+      const dailyAvgHeartRate = {};
+      Object.entries(dailyHeartRates).forEach(([date, hrs]) => {
+        const avg = hrs.reduce((sum, hr) => sum + hr, 0) / hrs.length;
+        dailyAvgHeartRate[date] = Math.round(avg);
+      });
+
+      // Combine steps and heart rate data
+      const allDates = new Set([...Object.keys(dailySteps), ...Object.keys(dailyAvgHeartRate)]);
+      const aggregatedData = Array.from(allDates).map(date => ({
+        date,
+        steps: Math.round(dailySteps[date] || 0),
+        heartRate: dailyAvgHeartRate[date] || null
+      })).sort((a, b) => new Date(b.date) - new Date(a.date));
 
       return {
         success: true,
         recordsFound: aggregatedData.length,
+        stepRecords: Object.keys(dailySteps).length,
+        heartRateRecords: Object.keys(dailyAvgHeartRate).length,
         data: aggregatedData
       };
     } catch (error) {
@@ -78,18 +113,22 @@ function AppleHealthImport({ onDataImported }) {
       dataMap[entry.date] = entry;
     });
 
-    // Merge imported step data
+    // Merge imported step and heart rate data
     let updatedCount = 0;
-    importedData.forEach(({ date, steps }) => {
+    importedData.forEach(({ date, steps, heartRate }) => {
       if (dataMap[date]) {
         // Update existing entry
         dataMap[date].steps = steps;
+        if (heartRate !== null) {
+          dataMap[date].heartRate = heartRate;
+        }
         updatedCount++;
       } else {
-        // Create new entry with just steps
+        // Create new entry with steps and heart rate
         dataMap[date] = {
           date,
           steps,
+          heartRate: heartRate || null,
           cigarettes: 0,
           alcoholDrinks: 0,
           waterGlasses: 0
@@ -139,6 +178,8 @@ function AppleHealthImport({ onDataImported }) {
         setResult({
           success: true,
           recordsFound: parseResult.recordsFound,
+          stepRecords: parseResult.stepRecords,
+          heartRateRecords: parseResult.heartRateRecords,
           totalEntries: mergeResult.totalEntries,
           updatedCount: mergeResult.updatedCount
         });
@@ -214,9 +255,10 @@ function AppleHealthImport({ onDataImported }) {
               <div style={styles.resultContent}>
                 <strong>Import Successful!</strong>
                 <p>
-                  Found {result.recordsFound} days of step data.
+                  Found {result.recordsFound} days of data: {result.stepRecords} days with steps
+                  {result.heartRateRecords > 0 && ` and ${result.heartRateRecords} days with heart rate`}.
                   Updated {result.updatedCount} existing entries.
-                  Total entries in database: {result.totalEntries}.
+                  Total entries: {result.totalEntries}.
                 </p>
               </div>
             </>

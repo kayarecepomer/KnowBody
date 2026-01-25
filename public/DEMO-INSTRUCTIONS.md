@@ -11,23 +11,31 @@ This repository includes a demo Apple Health export file (`demo-health-data.xml`
   - Days 1-30: 10,000-12,000 steps/day (building healthy habits)
   - Days 31-60: 11,000-14,000 steps/day (improving consistency)
   - Days 61-90: 12,000-15,000 steps/day (excellent performance!)
-- **Total Records**: ~1,049 step count entries (realistic Apple Health export)
+- **Heart Rate Data**:
+  - Days 1-30: Resting HR 75-82 bpm (starting fitness level)
+  - Days 31-60: Resting HR 70-78 bpm (improving cardiovascular health)
+  - Days 61-90: Resting HR 65-75 bpm (optimal fitness!)
+  - Multiple daily readings showing progression
+- **Total Records**: ~1,592 health entries
+  - 1,052 step count records (realistic Apple Health export)
+  - 540 heart rate measurements (6 per day from Apple Watch)
 - **Quality**: Data patterns designed to demonstrate:
   - Long streak maintenance
   - Gradual improvement over time
   - Consistent healthy behavior
   - High weekly grades (A range)
+  - Cardiovascular fitness improvement
 
 ### How to Use Demo Data
 
 1. **Access the App**: Navigate to the Daily page in KnowBody
 2. **Scroll Down**: Find the "Import Apple Health Data" section at the bottom
 3. **Click Upload**: Select the `demo-health-data.xml` file from this directory
-4. **Wait for Import**: The system will process all 1,049 records
+4. **Wait for Import**: The system will process all 1,592 records (steps + heart rate)
 5. **Explore Features**:
    - **Daily Page**: See current day's data
    - **Streak Page**: View impressive 80+ day streak
-   - **Stats Page**: Analyze 90 days of progression charts
+   - **Stats Page**: Analyze 90 days of progression charts (including heart rate!)
    - **Reports Page**: Get personalized recommendations
    - **Life Impact Page**: See health impact analysis
 
@@ -37,9 +45,11 @@ After importing the demo data, you should see:
 
 - ✅ **Strong Streak**: 80+ consecutive days with A- or higher grades
 - ✅ **Consistent Steps**: Daily average of 10,000-14,000 steps
+- ✅ **Heart Rate Tracking**: 90 days of resting heart rate data showing improvement
 - ✅ **Weekly Trends**: Clear upward progression over 3 months
 - ✅ **High Grades**: Most days achieve A or A+ ratings
 - ✅ **Research Citations**: Recommendations backed by 18 medical studies
+- ✅ **Cardiovascular Health**: Heart rate chart shows fitness improvements
 
 ### Manual Data Entry (Alternative)
 
@@ -73,11 +83,12 @@ To start fresh:
    - Life expectancy impact analysis
 
 **Key Talking Points**:
-- "90 days of tracked health data"
+- "90 days of tracked health data including heart rate"
 - "Consistent 80+ day streak demonstrates user engagement"
 - "All recommendations backed by peer-reviewed research"
 - "Age-personalized health insights"
-- "Apple Health integration for real-world data"
+- "Apple Health integration pulls steps AND heart rate data"
+- "Heart rate chart shows clear cardiovascular fitness improvement"
 
 ---
 
