@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, BarChart3, Flame, FileText } from 'lucide-react';
+import { Home, BarChart3, Flame, FileText, HeartPulse } from 'lucide-react';
 
 /**
  * Navigation - Navigation tabs for switching between pages
@@ -11,6 +11,7 @@ function Navigation() {
   const isStats = location.pathname === '/stats';
   const isStreak = location.pathname === '/streak';
   const isReports = location.pathname === '/reports';
+  const isLifeExpectancy = location.pathname === '/life-expectancy';
 
   return (
     <nav style={styles.nav}>
@@ -56,6 +57,17 @@ function Navigation() {
       >
         <FileText size={20} />
         <span>Reports</span>
+      </Link>
+
+      <Link
+        to="/life-expectancy"
+        style={{
+          ...styles.navItem,
+          ...(isLifeExpectancy ? styles.navItemActive : {})
+        }}
+      >
+        <HeartPulse size={20} />
+        <span>Life Impact</span>
       </Link>
     </nav>
   );

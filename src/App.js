@@ -1,16 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Navigation from './components/Navigation';
 import SettingsModal from './components/SettingsModal';
+import OnboardingModal from './components/OnboardingModal';
 import DailyPage from './pages/DailyPage';
 import StatsPage from './pages/StatsPage';
 import StreakPage from './pages/StreakPage';
 import ReportPage from './pages/ReportPage';
+import LifeExpectancyPage from './pages/LifeExpectancyPage';
 import { Activity, Settings } from 'lucide-react';
 
 function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    // Check if user has completed onboarding
+    const userProfile = localStorage.getItem('userProfile');
+    if (!userProfile) {
+      setShowOnboarding(true);
+    }
+  }, []);
 
   return (
     <Router>
@@ -40,6 +51,7 @@ function App() {
             <Route path="/stats" element={<StatsPage />} />
             <Route path="/streak" element={<StreakPage />} />
             <Route path="/reports" element={<ReportPage />} />
+            <Route path="/life-expectancy" element={<LifeExpectancyPage />} />
           </Routes>
         </main>
 
@@ -50,6 +62,11 @@ function App() {
         <SettingsModal 
           isOpen={settingsOpen} 
           onClose={() => setSettingsOpen(false)} 
+        />
+
+        <OnboardingModal
+          isOpen={showOnboarding}
+          onComplete={() => setShowOnboarding(false)}
         />
       </div>
     </Router>
