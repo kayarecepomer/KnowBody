@@ -1,0 +1,9 @@
+INSTRUCTIONS: Place your black pulse icon PNG file here as "pulse-icon.png"
+
+The PNG should be:
+- Black color (will show on dark background)
+- Approximately 40x40 pixels or larger
+- Transparent background
+- Clear pulse/heartbeat waveform design
+
+This file will be displayed in the app header next to "KnowBody"

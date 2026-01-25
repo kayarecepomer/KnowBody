@@ -5,6 +5,52 @@
  * Streak breaks with B+ or lower
  */
 
+import { getAllHealthData } from '../utils/storage';
+import { calculateDailyGrade } from './grading';
+import { saveStreakData } from '../utils/storage';
+
+/**
+ * Update streak data after health data changes
+ * Recalculates streaks based on all health data in storage
+ */
+export function updateStreakAfterDataChange() {
+  try {
+    const healthData = getAllHealthData();
+    
+    if (!healthData || healthData.length === 0) {
+      // No data, reset streak
+      const emptyStreak = {
+        currentStreak: 0,
+        longestStreak: 0,
+        streakHistory: [],
+        lastGradeDate: null
+      };
+      saveStreakData(emptyStreak);
+      return emptyStreak;
+    }
+    
+    // Calculate grade for each day
+    const gradeHistory = healthData.map(dayData => {
+      const grade = calculateDailyGrade(dayData);
+      return {
+        date: dayData.date,
+        grade: grade.letter
+      };
+    });
+    
+    // Calculate new streak data
+    const streakData = calculateStreakData(gradeHistory);
+    
+    // Save updated streak data
+    saveStreakData(streakData);
+    
+    return streakData;
+  } catch (error) {
+    console.error('Error updating streak data:', error);
+    return null;
+  }
+}
+
 /**
  * Check if a grade qualifies for streak continuation
  * @param {string} letterGrade - Letter grade (e.g., 'A-', 'B+')

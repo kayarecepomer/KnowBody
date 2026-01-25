@@ -1,0 +1,216 @@
+{
+  "cigarettes": [
+    {
+      "id": "cig_1",
+      "title": "Doll et al. (BMJ): 50-year study on smoking and mortality",
+      "authors": "Doll R, Peto R, Boreham J, Sutherland I",
+      "journal": "BMJ",
+      "year": 2004,
+      "url": "https://www.bmj.com/content/328/7455/1519",
+      "keyFindings": "Heavy smoking (20+ cigarettes/day) reduces life expectancy by 10-13 years on average. Quitting at any age provides substantial health benefits.",
+      "relevantFor": ["heavy_smoker", "all_ages"],
+      "impactScore": 10
+    },
+    {
+      "id": "cig_2",
+      "title": "Hackshaw et al. (BMJ): Light smoking and cardiovascular disease",
+      "authors": "Hackshaw A, Morris JK, Boniface S, Tang JL, Milenković D",
+      "journal": "BMJ",
+      "year": 2018,
+      "url": "https://www.bmj.com/content/360/bmj.j5855",
+      "keyFindings": "Even light smoking (1-5 cigarettes/day) increases cardiovascular disease risk by 50-60% compared to non-smokers. No safe level of smoking exists.",
+      "relevantFor": ["light_smoker", "cardiovascular_risk"],
+      "impactScore": 8
+    }
+  ],
+  "water": [
+    {
+      "id": "water_1",
+      "title": "Popkin et al. (Nutrition Reviews): Hydration and health",
+      "authors": "Popkin BM, D'Anci KE, Rosenberg IH",
+      "journal": "Nutrition Reviews",
+      "year": 2010,
+      "url": "https://academic.oup.com/nutritionreviews/article/68/8/439/1841926",
+      "keyFindings": "Adequate hydration (8+ glasses/day) is essential for cognitive function, physical performance, and reducing kidney stone risk. Chronic dehydration increases health complications.",
+      "relevantFor": ["dehydrated", "elderly", "all_ages"],
+      "impactScore": 7
+    },
+    {
+      "id": "water_2",
+      "title": "IOM (National Academies): Dietary reference intakes for water",
+      "authors": "Institute of Medicine",
+      "journal": "National Academies Press",
+      "year": 2005,
+      "url": "https://www.nap.edu/read/10925/chapter/1",
+      "keyFindings": "Recommended daily water intake: 3.7L for men, 2.7L for women (including all beverages and food). Individual needs vary by activity level, climate, and health status.",
+      "relevantFor": ["all_ages", "general_health"],
+      "impactScore": 6
+    }
+  ],
+  "alcohol": [
+    {
+      "id": "alcohol_1",
+      "title": "Wood et al. (Lancet): Alcohol and cardiovascular mortality",
+      "authors": "Wood AM, Kaptoge S, Butterworth AS, et al.",
+      "journal": "The Lancet",
+      "year": 2018,
+      "url": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(18)30134-X/fulltext",
+      "keyFindings": "Heavy drinking (4+ drinks/day) reduces life expectancy by 5-10 years. Even moderate drinking increases cardiovascular and cancer risks.",
+      "relevantFor": ["heavy_drinker", "cardiovascular_risk"],
+      "impactScore": 9
+    },
+    {
+      "id": "alcohol_2",
+      "title": "GBD 2016 Alcohol Collaborators (Lancet): Global alcohol burden",
+      "authors": "GBD 2016 Alcohol Collaborators",
+      "journal": "The Lancet",
+      "year": 2018,
+      "url": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(18)31310-2/fulltext",
+      "keyFindings": "The safest level of alcohol consumption is none. Even low levels of drinking increase health risks, particularly for cancer and injuries.",
+      "relevantFor": ["all_drinkers", "cancer_risk"],
+      "impactScore": 8
+    }
+  ],
+  "walking": [
+    {
+      "id": "walk_1",
+      "title": "Lee et al. (JAMA): Steps per day and all-cause mortality",
+      "authors": "Lee IM, Shiroma EJ, Kamada M, Bassett DR, Matthews CE, Buring JE",
+      "journal": "JAMA",
+      "year": 2019,
+      "url": "https://jamanetwork.com/journals/jama/fullarticle/2763292",
+      "keyFindings": "Taking 7,000-10,000 steps/day significantly reduces all-cause mortality. Even 4,000 steps/day shows benefits compared to sedentary lifestyle.",
+      "relevantFor": ["sedentary", "elderly", "all_ages"],
+      "impactScore": 8
+    },
+    {
+      "id": "walk_2",
+      "title": "Paluch et al. (Lancet Public Health): Steps and longevity",
+      "authors": "Paluch AE, Bajpai S, Bassett DR, et al.",
+      "journal": "The Lancet Public Health",
+      "year": 2022,
+      "url": "https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(21)00302-9/fulltext",
+      "keyFindings": "For adults 60+, 6,000-8,000 steps/day is optimal for reducing mortality risk. For younger adults, 8,000-10,000 steps provides maximum benefit.",
+      "relevantFor": ["elderly", "young_adults", "all_ages"],
+      "impactScore": 7
+    }
+  ],
+  "sleep": [
+    {
+      "id": "sleep_1",
+      "title": "Cappuccio et al. (Sleep): Sleep duration and all-cause mortality",
+      "authors": "Cappuccio FP, D'Elia L, Strazzullo P, Miller MA",
+      "journal": "Sleep",
+      "year": 2010,
+      "url": "https://academic.oup.com/sleep/article/33/5/585/2696241",
+      "keyFindings": "Both short (<6 hours) and long (>9 hours) sleep duration are associated with increased mortality risk. Optimal sleep is 7-8 hours per night.",
+      "relevantFor": ["sleep_deprived", "oversleeper", "all_ages"],
+      "impactScore": 8
+    },
+    {
+      "id": "sleep_2",
+      "title": "Watson et al. (Sleep Health): Recommended sleep duration",
+      "authors": "Watson NF, Badr MS, Belenky G, et al.",
+      "journal": "Sleep Health",
+      "year": 2015,
+      "url": "https://www.sleephealthjournal.org/article/S2352-7218(15)00015-7/fulltext",
+      "keyFindings": "National Sleep Foundation recommends 7-9 hours for adults 18-64, and 7-8 hours for adults 65+. Quality matters as much as quantity.",
+      "relevantFor": ["all_ages", "elderly"],
+      "impactScore": 7
+    }
+  ],
+  "heart_rate": [
+    {
+      "id": "hr_1",
+      "title": "Fox et al. (Lancet): Resting heart rate and cardiovascular outcomes",
+      "authors": "Fox K, Borer JS, Camm AJ, et al.",
+      "journal": "The Lancet",
+      "year": 2007,
+      "url": "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(07)61303-8/fulltext",
+      "keyFindings": "Elevated resting heart rate (>80 bpm) is associated with increased cardiovascular mortality. Each 10 bpm increase raises risk by 16%.",
+      "relevantFor": ["cardiovascular_risk", "all_ages"],
+      "impactScore": 7
+    },
+    {
+      "id": "hr_2",
+      "title": "Zhang et al. (CMAJ): Heart rate and longevity",
+      "authors": "Zhang D, Shen X, Qi X",
+      "journal": "Canadian Medical Association Journal",
+      "year": 2016,
+      "url": "https://www.cmaj.ca/content/188/3/E53",
+      "keyFindings": "Resting heart rate >75 bpm doubles cardiovascular disease risk. Regular exercise can reduce resting heart rate by 10-15 bpm.",
+      "relevantFor": ["cardiovascular_risk", "sedentary"],
+      "impactScore": 6
+    }
+  ],
+  "general": [
+    {
+      "id": "gen_1",
+      "title": "Khaw et al. (PLoS Medicine): Combined lifestyle factors and mortality",
+      "authors": "Khaw KT, Wareham N, Bingham S, Welch A, Luben R, Day N",
+      "journal": "PLoS Medicine",
+      "year": 2008,
+      "url": "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.0050012",
+      "keyFindings": "Four healthy behaviors (not smoking, being active, moderate drinking, eating 5 fruits/vegetables daily) can add 14 years to life expectancy.",
+      "relevantFor": ["all_ages", "prevention"],
+      "impactScore": 9
+    },
+    {
+      "id": "gen_2",
+      "title": "Li et al. (Circulation): Healthy lifestyle and life expectancy",
+      "authors": "Li Y, Pan A, Wang DD, et al.",
+      "journal": "Circulation",
+      "year": 2018,
+      "url": "https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.117.032047",
+      "keyFindings": "Five low-risk lifestyle factors (healthy diet, regular exercise, healthy weight, moderate alcohol, no smoking) at age 50 project 14 years longer life for women and 12 years for men.",
+      "relevantFor": ["all_ages", "prevention", "elderly"],
+      "impactScore": 9
+    },
+    {
+      "id": "gen_3",
+      "title": "Akesson et al. (Archives of Internal Medicine): Low-risk lifestyle and mortality",
+      "authors": "Akesson A, Larsson SC, Discacciati A, Wolk A",
+      "journal": "Archives of Internal Medicine",
+      "year": 2014,
+      "url": "https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/1918918",
+      "keyFindings": "Men with 5 low-risk factors (healthy diet, normal weight, moderate alcohol, no smoking, physically active) had 86% lower cardiovascular mortality risk.",
+      "relevantFor": ["men", "cardiovascular_risk"],
+      "impactScore": 8
+    },
+    {
+      "id": "gen_4",
+      "title": "Ford et al. (Circulation): Healthy lifestyle and chronic disease",
+      "authors": "Ford ES, Bergmann MM, Kröger J, Schienkiewitz A, Weikert C, Boeing H",
+      "journal": "Archives of Internal Medicine",
+      "year": 2009,
+      "url": "https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/414179",
+      "keyFindings": "Four healthy lifestyle factors reduce risk of major chronic diseases by 78%: never smoking, BMI <30, 3.5+ hours exercise/week, healthy diet score.",
+      "relevantFor": ["all_ages", "disease_prevention"],
+      "impactScore": 8
+    }
+  ],
+  "elderly_specific": [
+    {
+      "id": "elderly_1",
+      "title": "Rizzuto et al. (BMJ): Lifestyle and mortality in the elderly",
+      "authors": "Rizzuto D, Orsini N, Qiu C, Wang HX, Fratiglioni L",
+      "journal": "BMJ",
+      "year": 2012,
+      "url": "https://www.bmj.com/content/345/bmj.e5568",
+      "keyFindings": "For people 75+, maintaining 4-5 healthy lifestyle factors (rich social network, moderate alcohol, no smoking, leisure activities, physical activity) can extend survival by 5 years.",
+      "relevantFor": ["elderly", "75+"],
+      "impactScore": 7
+    },
+    {
+      "id": "elderly_2",
+      "title": "Sabia et al. (BMJ): Healthy behaviors and compression of morbidity",
+      "authors": "Sabia S, Singh-Manoux A, Hagger-Johnson G, et al.",
+      "journal": "BMJ",
+      "year": 2012,
+      "url": "https://www.bmj.com/content/345/bmj.e7191",
+      "keyFindings": "Adopting healthy behaviors in middle age delays onset of disability by 5-6 years, compressing morbidity into shorter period at end of life.",
+      "relevantFor": ["middle_aged", "elderly"],
+      "impactScore": 7
+    }
+  ]
+}

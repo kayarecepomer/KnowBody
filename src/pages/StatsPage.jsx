@@ -33,7 +33,8 @@ function StatsPage() {
         water: entry.waterGlasses || 0,
         cigarettes: entry.cigarettes || 0,
         alcohol: entry.alcoholDrinks || 0,
-        steps: entry.steps || 0
+        steps: entry.steps || 0,
+        heartRate: entry.heartRate || null
       };
     });
     
@@ -71,6 +72,14 @@ function StatsPage() {
           dataKey="alcohol"
           isHarmful={true}
           emoji="🍷"
+        />
+        
+        <ProductChart 
+          title="Heart Rate (bpm)"
+          data={chartData}
+          dataKey="heartRate"
+          isHarmful={false}
+          emoji="❤️"
         />
       </div>
 

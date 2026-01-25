@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, ExternalLink, AlertCircle } from 'lucide-react';
 import { getAllHealthData } from '../utils/storage';
+import researchDatabase from '../data/research-database.json';
 
 /**
  * ReportPage - Shows research papers and recommendations based on user's health stats
  */
 function ReportPage() {
   const [userStats, setUserStats] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
 
   useEffect(() => {
     const loadData = () => {
+      // Load user profile
+      const profileStr = localStorage.getItem('userProfile');
+      if (profileStr) {
+        setUserProfile(JSON.parse(profileStr));
+      }
+
       const allData = getAllHealthData();
       if (allData.length === 0) {
         setUserStats(null);
@@ -22,113 +30,176 @@ function ReportPage() {
       const avgCigarettes = last7Days.reduce((sum, d) => sum + (d.cigarettes || 0), 0) / last7Days.length;
       const avgAlcohol = last7Days.reduce((sum, d) => sum + (d.alcoholDrinks || 0), 0) / last7Days.length;
       const avgWater = last7Days.reduce((sum, d) => sum + (d.waterGlasses || 0), 0) / last7Days.length;
+      const avgSteps = last7Days.reduce((sum, d) => sum + (d.steps || 0), 0) / last7Days.length;
 
-      setUserStats({
+      const stats = {
         avgCigarettes,
         avgAlcohol,
-        avgWater
-      });
+        avgWater,
+        avgSteps
+      };
 
-      // Generate recommendations based on stats
-      generateRecommendations(avgCigarettes, avgAlcohol, avgWater);
+      setUserStats(stats);
+
+      // Generate recommendations based on stats and age
+      const profile = profileStr ? JSON.parse(profileStr) : null;
+      generateRecommendations(stats, profile);
     };
     
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const generateRecommendations = (cigarettes, alcohol, water) => {
+  const generateRecommendations = (stats, profile) => {
     const recs = [];
+    const age = profile?.age || 30;
+    const isElderly = age >= 60;
 
-    // Smoking recommendations
-    if (cigarettes >= 10) {
+    // Smoking recommendations with research
+    if (stats.avgCigarettes >= 10) {
+      const research = researchDatabase.cigarettes[0];
+      const ageNote = isElderly ? ` At age ${age}, the cumulative effects are especially significant.` : "";
+      
       recs.push({
         id: 1,
         category: 'Smoking',
         severity: 'high',
         title: 'Heavy Smoking Impact on Health',
-        description: `You're averaging ${cigarettes.toFixed(1)} cigarettes per day. Research shows this significantly increases health risks.`,
-        impact: 'Studies indicate heavy smoking (10+ cigarettes/day) can reduce lifespan by 8-10 years on average.',
-        researchLinks: [
-          { title: 'WHO Report on Tobacco', url: 'https://www.who.int/news-room/fact-sheets/detail/tobacco' },
-          { title: 'CDC Smoking & Health Effects', url: 'https://www.cdc.gov/tobacco/data_statistics/fact_sheets/health_effects/effects_cig_smoking/index.htm' }
-        ],
+        description: `You're averaging ${stats.avgCigarettes.toFixed(1)} cigarettes per day. Research shows this significantly increases health risks.${ageNote}`,
+        impact: research.keyFindings,
+        researchLinks: [research],
         recommendation: 'Consider seeking professional help to quit. Even reducing by 50% would significantly improve your health outcomes.'
       });
-    } else if (cigarettes > 0) {
+    } else if (stats.avgCigarettes > 0) {
+      const research = researchDatabase.cigarettes[1];
+      
       recs.push({
         id: 2,
         category: 'Smoking',
         severity: 'medium',
         title: 'Any Smoking is Harmful',
-        description: `You're averaging ${cigarettes.toFixed(1)} cigarettes per day.`,
-        impact: 'Even light smoking increases cardiovascular disease risk by 50-60% compared to non-smokers.',
-        researchLinks: [
-          { title: 'Light Smoking Health Risks', url: 'https://www.heart.org/en/healthy-living/healthy-lifestyle/quit-smoking-tobacco' }
-        ],
+        description: `You're averaging ${stats.avgCigarettes.toFixed(1)} cigarettes per day.`,
+        impact: research.keyFindings,
+        researchLinks: [research],
         recommendation: 'The best time to quit is now. Every cigarette avoided improves your health.'
       });
     }
 
-    // Alcohol recommendations
-    if (alcohol >= 3) {
+    // Alcohol recommendations with research
+    if (stats.avgAlcohol >= 3) {
+      const research = researchDatabase.alcohol[0];
+      const ageNote = isElderly ? ` At age ${age}, the liver's ability to process alcohol decreases, increasing health risks.` : "";
+      
       recs.push({
         id: 3,
         category: 'Alcohol',
         severity: 'high',
         title: 'Excessive Alcohol Consumption',
-        description: `You're averaging ${alcohol.toFixed(1)} drinks per day, which exceeds safe limits.`,
-        impact: 'Chronic heavy drinking increases risk of liver disease, certain cancers, and reduces life expectancy by 5-10 years.',
-        researchLinks: [
-          { title: 'NIH Alcohol Health Risks', url: 'https://www.niaaa.nih.gov/alcohols-effects-health' },
-          { title: 'CDC Alcohol & Health', url: 'https://www.cdc.gov/alcohol/fact-sheets/alcohol-use.htm' }
-        ],
+        description: `You're averaging ${stats.avgAlcohol.toFixed(1)} drinks per day, which exceeds safe limits.${ageNote}`,
+        impact: research.keyFindings,
+        researchLinks: [research, researchDatabase.alcohol[1]],
         recommendation: 'Reduce to ≤2 drinks/day for men or ≤1 for women. Consider speaking with a healthcare provider.'
       });
-    } else if (alcohol > 1.5) {
+    } else if (stats.avgAlcohol > 1.5) {
+      const research = researchDatabase.alcohol[1];
+      
       recs.push({
         id: 4,
         category: 'Alcohol',
         severity: 'medium',
         title: 'Moderate Alcohol Consumption',
-        description: `You're averaging ${alcohol.toFixed(1)} drinks per day.`,
-        impact: 'Moderate drinking still carries health risks including increased cancer risk.',
-        researchLinks: [
-          { title: 'Moderate Drinking Guidelines', url: 'https://www.niaaa.nih.gov/alcohol-health/overview-alcohol-consumption/moderate-binge-drinking' }
-        ],
+        description: `You're averaging ${stats.avgAlcohol.toFixed(1)} drinks per day.`,
+        impact: research.keyFindings,
+        researchLinks: [research],
         recommendation: 'Try to limit to 1 drink per day or less for optimal health.'
       });
     }
 
-    // Hydration recommendations
-    if (water < 6) {
+    // Hydration recommendations with research
+    if (stats.avgWater < 6) {
+      const research = researchDatabase.water[0];
+      const severity = stats.avgWater < 4 ? 'high' : 'medium';
+      const ageNote = isElderly 
+        ? ` Since you are ${age} years old, adequate hydration is especially important for cognitive function and reducing fall risk.`
+        : "";
+      
       recs.push({
         id: 5,
         category: 'Hydration',
-        severity: water < 4 ? 'high' : 'medium',
+        severity: severity,
         title: 'Insufficient Water Intake',
-        description: `You're averaging ${water.toFixed(1)} glasses per day, below the recommended 8 glasses.`,
-        impact: 'Chronic dehydration affects cognitive function, physical performance, and increases kidney stone risk.',
-        researchLinks: [
-          { title: 'Hydration Science', url: 'https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/in-depth/water/art-20044256' }
-        ],
+        description: `You're averaging ${stats.avgWater.toFixed(1)} glasses per day, below the recommended 8 glasses.${ageNote}`,
+        impact: research.keyFindings,
+        researchLinks: [research, researchDatabase.water[1]],
         recommendation: 'Aim for 8 glasses (64oz) of water daily. Set reminders if needed.'
       });
     }
 
+    // Walking/Activity recommendations with research
+    if (stats.avgSteps > 0) {
+      if (stats.avgSteps < 5000) {
+        const research = researchDatabase.walking[0];
+        const ageNote = isElderly 
+          ? ` For adults ${age}+, maintaining mobility through regular walking is crucial for independence and longevity.`
+          : "";
+        
+        recs.push({
+          id: 6,
+          category: 'Physical Activity',
+          severity: 'high',
+          title: 'Low Physical Activity',
+          description: `You're averaging only ${Math.round(stats.avgSteps)} steps per day.${ageNote}`,
+          impact: research.keyFindings,
+          researchLinks: [research, researchDatabase.walking[1]],
+          recommendation: isElderly 
+            ? 'Aim for 6,000-8,000 steps per day. Start gradually and increase slowly.'
+            : 'Aim for 8,000-10,000 steps per day. Start with small increases.'
+        });
+      } else if (stats.avgSteps < 7000) {
+        const research = researchDatabase.walking[1];
+        
+        recs.push({
+          id: 7,
+          category: 'Physical Activity',
+          severity: 'medium',
+          title: 'Moderate Activity Level',
+          description: `You're averaging ${Math.round(stats.avgSteps)} steps per day.`,
+          impact: research.keyFindings,
+          researchLinks: [research],
+          recommendation: 'You\'re moderately active but below optimal. Try to increase by 1,000-2,000 steps.'
+        });
+      }
+    }
+
     // Positive feedback
-    if (cigarettes === 0 && alcohol <= 1 && water >= 7) {
+    if (stats.avgCigarettes === 0 && stats.avgAlcohol <= 1 && stats.avgWater >= 7 && stats.avgSteps >= 7000) {
+      const research = researchDatabase.general[0];
+      
       recs.push({
-        id: 6,
+        id: 8,
         category: 'Overall Health',
         severity: 'positive',
         title: 'Excellent Health Habits!',
         description: 'Your current habits are aligned with health research recommendations.',
-        impact: 'Maintaining these habits can add years to your life and significantly improve quality of life.',
-        researchLinks: [
-          { title: 'Healthy Lifestyle Benefits', url: 'https://www.health.harvard.edu/staying-healthy/healthy-lifestyle-5-keys-to-a-longer-life' }
-        ],
+        impact: research.keyFindings,
+        researchLinks: [research, researchDatabase.general[1]],
         recommendation: 'Keep up the great work! Continue tracking to maintain these healthy patterns.'
+      });
+    }
+
+    // Add elderly-specific recommendations if applicable
+    if (isElderly && (stats.avgCigarettes > 0 || stats.avgAlcohol > 0 || stats.avgSteps < 6000)) {
+      const research = researchDatabase.elderly_specific[0];
+      
+      recs.push({
+        id: 9,
+        category: 'Age-Specific',
+        severity: 'medium',
+        title: 'Healthy Aging Recommendations',
+        description: `At age ${age}, lifestyle factors have a significant impact on longevity and quality of life.`,
+        impact: research.keyFindings,
+        researchLinks: [research, researchDatabase.elderly_specific[1]],
+        recommendation: 'Focus on maintaining social connections, regular physical activity, and avoiding smoking and excessive alcohol for healthy aging.'
       });
     }
 
@@ -175,6 +246,9 @@ function ReportPage() {
 
       <div style={styles.statsOverview}>
         <h3>Your Weekly Averages</h3>
+        {userProfile && (
+          <p style={styles.ageDisplay}>Age: {userProfile.age} years | Recommendations personalized for your age</p>
+        )}
         <div style={styles.statsGrid}>
           <div style={styles.statItem}>
             <span style={styles.statIcon}>🚬</span>
@@ -190,6 +264,11 @@ function ReportPage() {
             <span style={styles.statIcon}>💧</span>
             <span style={styles.statValue}>{userStats.avgWater.toFixed(1)}</span>
             <span style={styles.statLabel}>glasses/day</span>
+          </div>
+          <div style={styles.statItem}>
+            <span style={styles.statIcon}>🚶</span>
+            <span style={styles.statValue}>{userStats.avgSteps > 0 ? Math.round(userStats.avgSteps) : 'N/A'}</span>
+            <span style={styles.statLabel}>steps/day</span>
           </div>
         </div>
       </div>
@@ -291,9 +370,17 @@ const styles = {
     marginBottom: '30px',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
   },
+  ageDisplay: {
+    textAlign: 'center',
+    color: '#4CAF50',
+    fontSize: '14px',
+    fontWeight: '600',
+    marginTop: '10px',
+    marginBottom: '10px'
+  },
   statsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
     gap: '20px',
     marginTop: '20px'
   },

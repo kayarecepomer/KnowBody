@@ -1,24 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Navigation from './components/Navigation';
 import SettingsModal from './components/SettingsModal';
+import OnboardingModal from './components/OnboardingModal';
 import DailyPage from './pages/DailyPage';
 import StatsPage from './pages/StatsPage';
 import StreakPage from './pages/StreakPage';
 import ReportPage from './pages/ReportPage';
-import { Activity, Settings } from 'lucide-react';
+import LifeExpectancyPage from './pages/LifeExpectancyPage';
+import { Settings } from 'lucide-react';
 
 function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    // Check if user has completed onboarding
+    const userProfile = localStorage.getItem('userProfile');
+    if (!userProfile) {
+      setShowOnboarding(true);
+    }
+  }, []);
 
   return (
     <Router>
       <div className="App">
         <header style={styles.header}>
           <div style={styles.headerContent}>
-            <Activity size={40} color="#4CAF50" />
-            <h1 style={styles.title}>Health Tracker</h1>
+            <img src="/images/pulse-icon.png" alt="Pulse" style={styles.logo} />
+            <h1 style={styles.title}>KnowBody</h1>
           </div>
           <p style={styles.subtitle}>Research-based health tracking for better living</p>
           
@@ -40,6 +51,7 @@ function App() {
             <Route path="/stats" element={<StatsPage />} />
             <Route path="/streak" element={<StreakPage />} />
             <Route path="/reports" element={<ReportPage />} />
+            <Route path="/life-expectancy" element={<LifeExpectancyPage />} />
           </Routes>
         </main>
 
@@ -50,6 +62,11 @@ function App() {
         <SettingsModal 
           isOpen={settingsOpen} 
           onClose={() => setSettingsOpen(false)} 
+        />
+
+        <OnboardingModal
+          isOpen={showOnboarding}
+          onComplete={() => setShowOnboarding(false)}
         />
       </div>
     </Router>
@@ -70,9 +87,15 @@ const styles = {
     alignItems: 'center',
     gap: '15px'
   },
+  logo: {
+    width: '40px',
+    height: '40px',
+    objectFit: 'contain'
+  },
   title: {
     margin: 0,
-    fontSize: '2.5em'
+    fontSize: '2.5em',
+    color: '#d0d0d0'
   },
   subtitle: {
     margin: '10px 0 0 0',

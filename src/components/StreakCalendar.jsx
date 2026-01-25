@@ -3,14 +3,15 @@ import React from 'react';
 /**
  * StreakCalendar - Duolingo-style calendar showing streak history
  * Displays days with successful streaks (A- or higher) and broken streaks
+ * Now shows only the current week and hides days without data
  */
 function StreakCalendar({ streakHistory = [] }) {
-  // Get the last 90 days for display
-  const getLast90Days = () => {
+  // Get the last 7 days for display (current week)
+  const getLast7Days = () => {
     const days = [];
     const today = new Date();
     
-    for (let i = 89; i >= 0; i--) {
+    for (let i = 6; i >= 0; i--) {
       const date = new Date(today);
       date.setDate(today.getDate() - i);
       days.push(date.toISOString().split('T')[0]);
@@ -19,7 +20,7 @@ function StreakCalendar({ streakHistory = [] }) {
     return days;
   };
 
-  const days = getLast90Days();
+  const days = getLast7Days();
   
   // Create a map for quick lookup
   const historyMap = new Map();
@@ -27,22 +28,25 @@ function StreakCalendar({ streakHistory = [] }) {
     historyMap.set(entry.date, entry);
   });
 
-  // Group days by week
-  const weeks = [];
-  let currentWeek = [];
-  
-  days.forEach((date, index) => {
-    currentWeek.push(date);
-    
-    if (currentWeek.length === 7 || index === days.length - 1) {
-      weeks.push(currentWeek);
-      currentWeek = [];
-    }
-  });
+  // Filter to only show days with data
+  const daysWithData = days.filter(date => historyMap.has(date));
+
+  // If no data at all, show message
+  if (daysWithData.length === 0) {
+    return (
+      <div style={styles.container}>
+        <h3 style={styles.title}>This Week's Streak</h3>
+        <div style={styles.noData}>
+          <p>No tracked days this week yet.</p>
+          <p>Start tracking your health metrics to see your streak!</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={styles.container}>
-      <h3 style={styles.title}>Last 90 Days</h3>
+      <h3 style={styles.title}>This Week's Streak</h3>
       
       <div style={styles.legend}>
         <div style={styles.legendItem}>
@@ -53,52 +57,41 @@ function StreakCalendar({ streakHistory = [] }) {
           <div style={{...styles.legendBox, backgroundColor: '#FFC107'}}></div>
           <span>No streak (B+ or lower)</span>
         </div>
-        <div style={styles.legendItem}>
-          <div style={{...styles.legendBox, backgroundColor: '#e0e0e0'}}></div>
-          <span>No data</span>
-        </div>
       </div>
 
       <div style={styles.calendar}>
-        <div style={styles.weekLabels}>
-          <div style={styles.weekLabel}>Sun</div>
-          <div style={styles.weekLabel}>Mon</div>
-          <div style={styles.weekLabel}>Tue</div>
-          <div style={styles.weekLabel}>Wed</div>
-          <div style={styles.weekLabel}>Thu</div>
-          <div style={styles.weekLabel}>Fri</div>
-          <div style={styles.weekLabel}>Sat</div>
-        </div>
-        
-        {weeks.map((week, weekIndex) => (
-          <div key={weekIndex} style={styles.week}>
-            {week.map((date) => {
-              const entry = historyMap.get(date);
-              const hasData = entry !== undefined;
-              const isStreak = hasData && entry.streakDay;
-              
-              let backgroundColor = '#e0e0e0'; // No data
-              if (hasData) {
-                backgroundColor = isStreak ? '#4CAF50' : '#FFC107';
-              }
-              
-              const dayOfMonth = new Date(date).getDate();
-              
-              return (
+        <div style={styles.week}>
+          {daysWithData.map((date) => {
+            const entry = historyMap.get(date);
+            const isStreak = entry.streakDay;
+            const backgroundColor = isStreak ? '#4CAF50' : '#FFC107';
+            
+            const dateObj = new Date(date);
+            const dayOfMonth = dateObj.getDate();
+            const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+            
+            return (
+              <div
+                key={date}
+                style={{
+                  ...styles.dayCard
+                }}
+                title={`${date}: ${entry.grade}`}
+              >
+                <div style={styles.dayName}>{dayName}</div>
                 <div
-                  key={date}
                   style={{
                     ...styles.day,
                     backgroundColor
                   }}
-                  title={hasData ? `${date}: ${entry.grade}` : `${date}: No data`}
                 >
                   <span style={styles.dayNumber}>{dayOfMonth}</span>
                 </div>
-              );
-            })}
-          </div>
-        ))}
+                <div style={styles.gradeLabel}>{entry.grade}</div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
@@ -114,13 +107,20 @@ const styles = {
   title: {
     textAlign: 'center',
     color: '#333',
-    marginBottom: '20px'
+    marginBottom: '20px',
+    fontSize: '1.5em'
+  },
+  noData: {
+    textAlign: 'center',
+    padding: '40px 20px',
+    color: '#666',
+    fontSize: '16px'
   },
   legend: {
     display: 'flex',
     justifyContent: 'center',
     gap: '20px',
-    marginBottom: '20px',
+    marginBottom: '25px',
     flexWrap: 'wrap'
   },
   legendItem: {
@@ -139,37 +139,47 @@ const styles = {
     flexDirection: 'column',
     gap: '5px'
   },
-  weekLabels: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(7, 1fr)',
-    gap: '5px',
-    marginBottom: '5px'
-  },
-  weekLabel: {
-    textAlign: 'center',
-    fontSize: '12px',
-    fontWeight: 'bold',
-    color: '#666'
-  },
   week: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(7, 1fr)',
-    gap: '5px'
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '15px',
+    flexWrap: 'wrap'
+  },
+  dayCard: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '8px',
+    minWidth: '80px'
+  },
+  dayName: {
+    fontSize: '14px',
+    fontWeight: '600',
+    color: '#666',
+    textAlign: 'center'
   },
   day: {
-    aspectRatio: '1',
-    borderRadius: '4px',
+    width: '60px',
+    height: '60px',
+    borderRadius: '8px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     cursor: 'pointer',
     transition: 'transform 0.2s',
-    fontSize: '12px',
+    fontSize: '18px',
     fontWeight: 'bold',
-    color: 'white'
+    color: 'white',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
   },
   dayNumber: {
     textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+  },
+  gradeLabel: {
+    fontSize: '16px',
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center'
   }
 };
 
