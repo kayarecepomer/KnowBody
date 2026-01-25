@@ -52,6 +52,9 @@ function ProductChart({ title, data, dataKey, isHarmful, emoji }) {
     }
   };
 
+  // Don't show suggestion for heart rate chart
+  const showMessage = dataKey !== 'heartRate';
+
   return (
     <div style={{...styles.container, backgroundColor}}>
       <div style={styles.header}>
@@ -86,9 +89,11 @@ function ProductChart({ title, data, dataKey, isHarmful, emoji }) {
         </ResponsiveContainer>
       </div>
       
-      <div style={styles.message}>
-        {getMessage()}
-      </div>
+      {showMessage && (
+        <div style={styles.message}>
+          {getMessage()}
+        </div>
+      )}
     </div>
   );
 }
