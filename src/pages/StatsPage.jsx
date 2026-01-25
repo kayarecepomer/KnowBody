@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import WeeklyGrade from '../components/WeeklyGrade';
-import MonthlyCalendar from '../components/MonthlyCalendar';
-import AlertsPanel from '../components/AlertsPanel';
-import WeeklyTrendsChart from '../components/Charts/WeeklyTrendsChart';
-import { getCurrentWeekData, getCurrentMonthData } from '../utils/storage';
-import { generateAlerts } from '../services/research';
+import ProductChart from '../components/Charts/ProductChart';
+import { getAllHealthData } from '../utils/storage';
 
 /**
- * StatsPage - Statistics page showing monthly calendar, weekly trends, and alerts
+ * StatsPage - Statistics page showing individual product charts and additional stats
  */
 function StatsPage() {
-  const [weekData, setWeekData] = useState([]);
-  const [monthData, setMonthData] = useState([]);
-  const [alerts, setAlerts] = useState([]);
+  const [chartData, setChartData] = useState([]);
 
   // Load data on mount and set up refresh
   useEffect(() => {
@@ -25,31 +19,90 @@ function StatsPage() {
   }, []);
 
   const loadData = () => {
-    const week = getCurrentWeekData();
-    const month = getCurrentMonthData();
+    // Get last 7 days of data
+    const allData = getAllHealthData();
+    const last7Days = allData.slice(0, 7).reverse();
     
-    setWeekData(week);
-    setMonthData(month);
+    // Transform data for charts
+    const transformed = last7Days.map((entry, index) => {
+      const date = new Date(entry.date);
+      const dayName = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][date.getDay()];
+      
+      return {
+        day: dayName,
+        water: entry.waterGlasses || 0,
+        cigarettes: entry.cigarettes || 0,
+        alcohol: entry.alcoholDrinks || 0,
+        steps: entry.steps || 0
+      };
+    });
     
-    // Generate alerts based on week data
-    const newAlerts = generateAlerts(week);
-    setAlerts(newAlerts);
+    setChartData(transformed);
   };
 
   return (
     <div style={styles.container}>
       <h1 style={styles.pageTitle}>Health Statistics</h1>
       <p style={styles.pageDescription}>
-        View your comprehensive health statistics, trends, and monthly progress
+        Track your weekly progress for each health metric
       </p>
       
-      <MonthlyCalendar monthData={monthData} />
-      
-      <WeeklyGrade weekData={weekData} />
-      
-      <AlertsPanel alerts={alerts} />
-      
-      <WeeklyTrendsChart data={weekData} />
+      {/* Product Charts Grid */}
+      <div style={styles.chartsGrid}>
+        <ProductChart 
+          title="Water Intake"
+          data={chartData}
+          dataKey="water"
+          isHarmful={false}
+          emoji="💧"
+        />
+        
+        <ProductChart 
+          title="Cigarettes"
+          data={chartData}
+          dataKey="cigarettes"
+          isHarmful={true}
+          emoji="🚬"
+        />
+        
+        <ProductChart 
+          title="Alcohol"
+          data={chartData}
+          dataKey="alcohol"
+          isHarmful={true}
+          emoji="🍷"
+        />
+      </div>
+
+      {/* Additional Stats */}
+      <div style={styles.additionalStats}>
+        <h2 style={styles.sectionTitle}>Weekly Summary</h2>
+        <div style={styles.summaryGrid}>
+          <div style={styles.statCard}>
+            <div style={styles.statIcon}>📊</div>
+            <div style={styles.statLabel}>Total Days Tracked</div>
+            <div style={styles.statValue}>{chartData.length}</div>
+          </div>
+          
+          <div style={styles.statCard}>
+            <div style={styles.statIcon}>💪</div>
+            <div style={styles.statLabel}>Avg Water/Day</div>
+            <div style={styles.statValue}>
+              {chartData.length > 0 
+                ? (chartData.reduce((sum, d) => sum + d.water, 0) / chartData.length).toFixed(1)
+                : 0}
+            </div>
+          </div>
+          
+          <div style={styles.statCard}>
+            <div style={styles.statIcon}>🎯</div>
+            <div style={styles.statLabel}>Healthy Days</div>
+            <div style={styles.statValue}>
+              {chartData.filter(d => d.water >= 6 && d.cigarettes === 0 && d.alcohol <= 1).length}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -71,6 +124,52 @@ const styles = {
     color: '#666',
     fontSize: '1.1em',
     marginBottom: '30px'
+  },
+  chartsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+    gap: '20px',
+    marginBottom: '40px'
+  },
+  additionalStats: {
+    marginTop: '40px'
+  },
+  sectionTitle: {
+    textAlign: 'center',
+    color: '#333',
+    fontSize: '1.8em',
+    marginBottom: '20px'
+  },
+  summaryGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+    gap: '20px'
+  },
+  statCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: '12px',
+    padding: '25px',
+    textAlign: 'center',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    minHeight: '150px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  statIcon: {
+    fontSize: '48px',
+    marginBottom: '10px'
+  },
+  statLabel: {
+    fontSize: '14px',
+    color: '#666',
+    marginBottom: '10px',
+    fontWeight: '600'
+  },
+  statValue: {
+    fontSize: '32px',
+    fontWeight: 'bold',
+    color: '#4CAF50'
   }
 };
 

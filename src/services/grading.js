@@ -4,6 +4,9 @@
  * Uses research-based scoring system
  */
 
+import { calculateStreakData } from './streakService';
+import { saveStreakData, getStreakData } from '../utils/storage';
+
 /**
  * Calculate weekly health grade from user data
  * @param {Array} weekData - Array of daily health data for the week
@@ -253,4 +256,42 @@ export function getGradeColor(letterGrade) {
   if (letterGrade.startsWith('D')) return '#F44336'; // Red
   if (letterGrade === 'F') return '#B71C1C'; // Dark red
   return '#9E9E9E'; // Gray for N/A
+}
+
+/**
+ * Update streak data based on a new grade
+ * @param {string} date - Date of the grade (YYYY-MM-DD)
+ * @param {string} letterGrade - Letter grade for the day
+ * @returns {Object} Updated streak data
+ */
+export function updateStreakWithGrade(date, letterGrade) {
+  // Get existing streak data
+  const existingStreak = getStreakData();
+  
+  // Get all historical grades (we'll need to reconstruct this from storage)
+  // For now, we'll build grade history from the streak history if it exists
+  let gradeHistory = [];
+  
+  if (existingStreak && existingStreak.streakHistory) {
+    gradeHistory = existingStreak.streakHistory.map(entry => ({
+      date: entry.date,
+      grade: entry.grade
+    }));
+  }
+  
+  // Update or add the new grade
+  const existingIndex = gradeHistory.findIndex(g => g.date === date);
+  if (existingIndex >= 0) {
+    gradeHistory[existingIndex].grade = letterGrade;
+  } else {
+    gradeHistory.push({ date, grade: letterGrade });
+  }
+  
+  // Calculate new streak data
+  const newStreakData = calculateStreakData(gradeHistory);
+  
+  // Save to storage
+  saveStreakData(newStreakData);
+  
+  return newStreakData;
 }
