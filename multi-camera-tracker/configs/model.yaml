@@ -1,0 +1,31 @@
+detection:
+  model: "yolov8n.pt"
+  confidence_threshold: 0.40
+  iou_threshold: 0.45
+  device: "auto"
+  classes:
+    - 0   # person
+
+tracking:
+  high_confidence_threshold: 0.60
+  low_confidence_threshold: 0.10
+  max_lost_frames: 30
+  min_hits: 3
+  iou_threshold: 0.30
+
+reid:
+  backend: "torchreid"    # "torchreid" | "mock"
+  model_name: "osnet_x1_0"
+  weights: null
+  device: "auto"
+  embedding_dim: 512
+  ema_alpha: 0.10
+  gallery_max_size: 50
+
+dashboard:
+  host: "0.0.0.0"
+  port: 8080
+  stream_fps: 15
+
+storage:
+  database_url: "sqlite:///./data/events.db"

@@ -1,0 +1,58 @@
+# Camera topology configuration
+cameras:
+  - id: cam_01
+    name: "Entrance Hall"
+    source: "rtsp://192.168.1.101:554/stream1"
+    width: 1920
+    height: 1080
+    fps: 25
+    exit_zones:
+      - name: "right_door"
+        points: [[1800, 0], [1920, 0], [1920, 1080], [1800, 1080]]
+      - name: "left_door"
+        points: [[0, 0], [120, 0], [120, 1080], [0, 1080]]
+    adjacent: [cam_02, cam_03]
+
+  - id: cam_02
+    name: "Corridor A"
+    source: "rtsp://192.168.1.102:554/stream1"
+    width: 1920
+    height: 1080
+    fps: 25
+    exit_zones:
+      - name: "far_end"
+        points: [[1750, 0], [1920, 0], [1920, 1080], [1750, 1080]]
+      - name: "near_end"
+        points: [[0, 0], [170, 0], [170, 1080], [0, 1080]]
+    adjacent: [cam_01, cam_04]
+
+  - id: cam_03
+    name: "Lobby"
+    source: "rtsp://192.168.1.103:554/stream1"
+    width: 1920
+    height: 1080
+    fps: 25
+    exit_zones:
+      - name: "exit_north"
+        points: [[0, 0], [1920, 0], [1920, 80], [0, 80]]
+      - name: "exit_south"
+        points: [[0, 1000], [1920, 1000], [1920, 1080], [0, 1080]]
+    adjacent: [cam_01, cam_04]
+
+  - id: cam_04
+    name: "Stairwell"
+    source: "rtsp://192.168.1.104:554/stream1"
+    width: 1280
+    height: 720
+    fps: 30
+    exit_zones:
+      - name: "upper_exit"
+        points: [[0, 0], [1280, 0], [1280, 60], [0, 60]]
+      - name: "lower_exit"
+        points: [[0, 660], [1280, 660], [1280, 720], [0, 720]]
+    adjacent: [cam_02, cam_03]
+
+handoff:
+  max_travel_time_seconds: 30
+  reid_similarity_threshold: 0.70
+  exit_confirm_frames: 3
