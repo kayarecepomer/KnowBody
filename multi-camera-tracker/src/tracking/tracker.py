@@ -186,10 +186,9 @@ class ByteTracker:
         # --- Step 3: second association (low dets vs remaining tracks) -
         lost_track_ids = [tid for tid in unmatched_tracks_1
                           if self._tracks[tid].state == TrackState.Lost]
-        _, unmatched_low_dets = self._associate(
+        _, _ = self._associate(
             lost_track_ids, low_dets, predicted_bboxes, second_pass=True
         )
-        _ = unmatched_low_dets  # low dets not matched are simply discarded
 
         # --- Step 4: mark still-unmatched tracks as lost / delete ------
         remaining_unmatched = [tid for tid in unmatched_tracks_1

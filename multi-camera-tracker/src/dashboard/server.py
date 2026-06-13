@@ -200,9 +200,13 @@ def create_app(state: DashboardState, stream_fps: float = 15) -> "FastAPI":
         last_count = 0
         try:
             while True:
-                transitions = state.get_transitions()
+                transitions = state.get_transitions()  # newest-first list
                 if len(transitions) > last_count:
-                    for ev in transitions[: len(transitions) - last_count]:
+                    # New events are prepended (index 0 = newest).
+                    # Slice the front to get only new entries, then send
+                    # oldest-of-new first for chronological order.
+                    new_events = transitions[: len(transitions) - last_count]
+                    for ev in reversed(new_events):
                         await websocket.send_text(json.dumps({"type": "transition", **ev}))
                     last_count = len(transitions)
                 await asyncio.sleep(0.5)

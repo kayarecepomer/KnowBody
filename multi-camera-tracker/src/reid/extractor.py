@@ -119,7 +119,7 @@ class EmbeddingExtractor:
 
         tensors = []
         for crop in crops:
-            img = crop[:, :, ::-1].astype(np.float32) / 255.0  # BGR→RGB, /255
+            img = cv2.cvtColor(crop, cv2.COLOR_BGR2RGB).astype(np.float32) / 255.0
             img = (img - mean) / std
             tensors.append(torch.from_numpy(img.transpose(2, 0, 1)))  # CHW
 

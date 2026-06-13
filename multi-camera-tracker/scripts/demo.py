@@ -107,7 +107,7 @@ def run_demo(sources: list, max_frames: int = 500, show: bool = True) -> None:
             high_thresh=0.5, low_thresh=0.1, max_lost_frames=20, min_hits=2
         )
         zones = [
-            ExitZone(name=z["name"], polygon=__import__("numpy").array(z["points"], dtype=float))
+            ExitZone(name=z["name"], polygon=np.array(z["points"], dtype=float))
             for z in cam.get("exit_zones", [])
         ]
         monitors[cam["id"]] = ExitZoneMonitor(
@@ -115,8 +115,6 @@ def run_demo(sources: list, max_frames: int = 500, show: bool = True) -> None:
             confirm_frames=handoff_cfg["exit_confirm_frames"],
             camera_id=cam["id"],
         )
-
-    known_ids: dict[str, set] = {c["id"]: set() for c in cameras_cfg}
     frame_count = 0
 
     logger.info("Demo running. Press 'q' to quit.")
@@ -136,8 +134,6 @@ def run_demo(sources: list, max_frames: int = 500, show: bool = True) -> None:
             any_frame = True
 
             # --- Mock detections (random boxes in top half) -------------
-            import numpy as np
-
             rng = np.random.default_rng(seed=frame_count + hash(cid) % 1000)
             num_det = rng.integers(1, 3)
             dets = []
